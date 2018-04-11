@@ -1,0 +1,32 @@
+.cur-type{
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+.cur-states{
+	margin-bottom: 10px;
+}
+.cur-states__item{
+	margin-bottom: 16px;
+}
+.cur-states__item--delete{
+	display: inline-block;
+	width: 14px;
+	color: red;
+	border: 1px solid red;
+	font-size: 10px;
+	text-align: center;
+	font-weight: bold;
+	border-radius: 5px;
+}
+.cur-states__item{
+	cursor: pointer;
+	padding: 2px 6px;
+	border-radius: 4px;
+}
+.cur-states__item:not(.is-deleted):hover{
+	color:#E53935;
+}
+.cur-states__item.is-deleted{
+	background-color: #E53935;
+	color:white;
+}

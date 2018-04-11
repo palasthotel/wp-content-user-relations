@@ -1,0 +1,27 @@
+.cur-users{
+
+}
+.cur-user__name{
+	font-weight: bold;
+}
+.cur-relations{
+	margin-left: 15px;
+}
+
+
+.cur-types{
+
+}
+.cur-types__item{
+	margin-bottom: 16px;
+}
+.cur-types__item--name{
+	border-bottom: 1px solid #d3d3d3;
+	margin-bottom: 8px;
+}
+.cur-states{
+	margin-left: 20px;
+}
+.cur-states__item--name{
+
+}
