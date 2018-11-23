@@ -3,7 +3,7 @@
  * Plugin Name: Content User Relations
  * Plugin URI: https://palasthotel.de
  * Description: Relate user states to your contents
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Palasthotel <edward.bock@palasthotel.de>
  * Author URI: https://palasthotel.de
  * Text Domain: content-user-relations
