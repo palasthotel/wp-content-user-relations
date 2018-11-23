@@ -118,6 +118,7 @@ function getRelationStates($type_id = null){
 function getRelationTypes($state_id = null){
 	global $wpdb;
 	$types = tablename(TABLE_TYPES);
+	$where = "";
 	if($state_id != null){
 		$typestates = tablename(TABLE_TYPESTATES);
 		$where = "WHERE id IN (SELECT type_id FROM $typestates WHERE state_id = ".intval($state_id).")";
