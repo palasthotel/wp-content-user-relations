@@ -49,76 +49,39 @@ class PostMetaBox {
 			"post_id" => get_the_ID(),
 		));
 
-		echo '<ul class="cur-users">';
+		$args = array();
+
+		$args['singular'] = "Related Member";
+        $args['plural'] = "Related Members";
+
+        $columns = array();
+        $columns['name'] = __('User', 'ph');
+        $columns['groups'] = __('Group', 'ph');
+
+        $sortable_columns = array();
+        $sortable_columns['name'] = array( 'name', true );
+
+		$items = array();
+
 		foreach ($relations->getUserMap() as $user_id => $relations){
+		    $item = array();
 			$user = get_user_by("ID", $user_id);
-			echo "<li class='cur-users__item'>";
-			echo "<span class='cur-user__name'>".$user->display_name."</span>";
-			echo "<ul class='cur-relations'>";
+			$item['user_id'] = $user_id;
+			$item['user'] = $user;
+			$item['name'] = $user->user_login;
+			foreach($relations as $relation){
+			    $item['relations'][] = $relation;
+                $item['group'][] =  "<li>".$relation->type_name." – ".$relation->state_name."</li>";
+            }
 
+            $item['groups'] = "<ul>".implode(" ", $item['group'])."</ul>";
+			$items[] = $item;
 
-			foreach ($relations as $relation){
-				$type = $relation->type_name;
-				$state = $relation->state_name;
-				echo "<li class='cur-relations__item'>$type: $state</li>";
-			}
-			echo "</ul>";
-			echo "</li>";
 		}
-		echo '</ul>';
 
-//		$query = new \WP_User_Query(array(
-//			"content_relations"=> array(
-//				"post_id" => get_the_ID(),
-//			)
-//		));
-//		$results = $query->get_results();
-//
-//		echo "<ul>";
-//		foreach ($results as $user){
-//			$id = $user->ID;
-//			$name = $user->display_name;
-//
-//			$relations = new Query(array(
-//				"user_id" => $id,
-//				"post_id" => get_the_ID(),
-//			));
-//
-//			echo "<li><span title='ID: $id'>$name</span>";
-//			echo "<ul style='margin-left: 30px;'>";
-//			foreach ($relations->get() as $relation){
-//				$type = $relation->type_name;
-//				$state = $relation->state_name;
-//				echo "<li>$type -> $state</li>";
-//			}
-//			echo "</ul>";
-//			echo "</li>";
-//		}
-//		echo "</ul>";
+        $table = new RenderTable($args, $columns, $sortable_columns, $items);
+		$table->display();
 
-//		$types = getRelationTypes();
-//
-//		echo "<ul class='cur-types'>";
-//		foreach( $types as $type){
-//			$typeName = $type->name;
-//			$typeSlug = $type->slug;
-//			$states = getRelationStates($type->id);
-//			if(count($states)<1) continue;
-//			echo "<li class='cur-types__item'>";
-//			echo "<div class='cur-types__item--name'>$typeName <small>[$typeSlug]</small></div>";
-//			echo "<ul class='cur-states'>";
-//			foreach($states as $state){
-//				$stateName = $state->name;
-//				echo "<li class='cur-states__item'>";
-//				echo "<div class='cur-states__item--name'>$stateName</div>";
-//
-//
-//				echo "</li>";
-//			}
-//			echo "</ul>";
-//			echo "</li>";
-//		}
-//		echo "</ul>";
 
 
 	}

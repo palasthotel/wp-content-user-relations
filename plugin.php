@@ -3,7 +3,7 @@
  * Plugin Name: Content User Relations
  * Plugin URI: https://palasthotel.de
  * Description: Relate user states to your contents
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Palasthotel <edward.bock@palasthotel.de>
  * Author URI: https://palasthotel.de
  * Text Domain: content-user-relations
@@ -78,6 +78,9 @@ class Plugin {
 
 		require_once dirname(__FILE__)."/inc/ajax.php";
 		$this->ajax = new Ajax($this);
+
+		// Add a clone of the List Tables Class
+        require_once dirname(__FILE__)."/inc/render-table.php";
 
 		/**
 		 * type and state settings
