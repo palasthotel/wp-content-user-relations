@@ -79,6 +79,9 @@ class Plugin {
 		require_once dirname(__FILE__)."/inc/ajax.php";
 		$this->ajax = new Ajax($this);
 
+		// Add a clone of the List Tables Class
+        require_once dirname(__FILE__)."/inc/render-table.php";
+
 		/**
 		 * type and state settings
 		 */
