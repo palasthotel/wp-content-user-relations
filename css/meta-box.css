@@ -25,3 +25,22 @@
 .cur-states__item--name{
 
 }
+
+#cur-user-autocomplete{
+	margin: 8px 0;
+}
+#cur-user-autocomplete label{
+	font-weight: bold;
+}
+#cur-user-autocomplete input{
+	width: 260px;
+}
+.cur-autocomplete-user-item{
+	border-bottom: 1px solid #eeeeee;
+}
+.user-item__user-email{
+	font-size: 0.8em;
+}
+.user-item__ID{
+	font-size: 0.8em;
+}

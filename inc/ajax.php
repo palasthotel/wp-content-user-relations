@@ -12,10 +12,12 @@ namespace ContentUserRelations;
 class Ajax {
 
 	const ACTION_FIND_CONTENTS = "cur_find_contents";
+	const ACTION_FIND_USERS = "cur_find_users";
 
 	public function __construct(Plugin $plugin) {
 		$this->plugin = $plugin;
 		add_action("wp_ajax_".self::ACTION_FIND_CONTENTS, array($this, "find_contents"));
+		add_action("wp_ajax_".self::ACTION_FIND_USERS, array($this, "find_users"));
 		add_action('init', array($this,'init'));
 	}
 
@@ -34,7 +36,8 @@ class Ajax {
 			'ContentUserRelations_API',
 			array(
 				"ajaxurls" => array(
-					"find" => $ajax_url.self::ACTION_FIND_CONTENTS,
+					"findContents" => $ajax_url.self::ACTION_FIND_CONTENTS,
+					"findUsers" => $ajax_url.self::ACTION_FIND_USERS,
 				),
 			)
 		);
@@ -44,6 +47,8 @@ class Ajax {
 	 * find contents
 	 */
 	function find_contents(){
+
+		$this->securityCheck();
 
 		$search = sanitize_text_field($_GET["s"]);
 		$query = new \WP_Query(array(
@@ -68,5 +73,44 @@ class Ajax {
 
 		// all contents that are available for relations
 
+	}
+
+	/**
+	 * find contents
+	 */
+	function find_users(){
+
+		$this->securityCheck();
+
+		$search = sanitize_text_field($_GET["s"]);
+		$users = new \WP_User_Query(array(
+			"search" => "*$search*",
+			"number" => 10,
+		));
+
+		$users_response = array();
+		foreach($users->get_results() as $user){
+			/**
+			 * @var \WP_User $user
+			 */
+			$users_response[] = array(
+				"ID" => $user->ID,
+				"display_name" => $user->display_name,
+				"user_email" => $user->user_email,
+			);
+
+		}
+
+		wp_send_json(array(
+			"users" => $users_response,
+			"overall" => $users->get_total(),
+		));
+
+		// all contents that are available for relations
+
+	}
+
+	private function securityCheck(){
+		if(!current_user_can("edit_posts")) die();
 	}
 }

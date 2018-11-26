@@ -24,6 +24,7 @@ class Plugin {
 
 	const HANDLE_API_JS = "content-user-relations-js-api";
 	const HANDLE_USER_PROFILE_JS = "content-user-relations-js-user-profile";
+	const HANDLE_POST_META_BOX_JS = "content-user-relations-js-meta-box";
 
 	/**
 	 * @var Plugin|null

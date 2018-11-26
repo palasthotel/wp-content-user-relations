@@ -9,7 +9,19 @@
 	 */
 	api.findRelatableContents = function(search, cb){
 		$.ajax({
-			url: api.ajaxurls.find,
+			url: api.ajaxurls.findContents,
+			data: {
+				s:search,
+			},
+			success: function(result){
+				cb(result);
+			}
+		});
+	};
+
+	api.findRelatableUsers = function(search, cb) {
+		$.ajax({
+			url: api.ajaxurls.findUsers,
 			data: {
 				s:search,
 			},
@@ -18,7 +30,5 @@
 			}
 		});
 	}
-
-
 
 })(jQuery, ContentUserRelations_API);

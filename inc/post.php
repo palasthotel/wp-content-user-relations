@@ -18,9 +18,7 @@ class Post {
 	 * @param \WP_Post $post
 	 */
 	function the_post($post){
-
-
-
+		// TODO: add relations to post object?
 	}
 
 }
