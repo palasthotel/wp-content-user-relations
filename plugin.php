@@ -9,7 +9,7 @@
  * Text Domain: content-user-relations
  * Domain Path: /languages
  * Requires at least: 4.0
- * Tested up to: 4.9.2
+ * Tested up to: 4.9.8
  * License: http://www.gnu.org/licenses/gpl-2.0.html GPLv2
  * @copyright Copyright (c) 2018, Palasthotel
  * @package Palasthotel\ContentUserRelations
