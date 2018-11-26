@@ -1,6 +1,6 @@
 <?php
 
-namespace ContentUserRelations;
+namespace ContentUserRelations\Database;
 
 /**
  * get a relation by relation id

@@ -70,7 +70,7 @@ class WPPostQueryExtension {
 			$user_id = intval($query->query_vars[self::ARG_RELATED_TO_USER]);
 			$user = get_userdata($user_id);
 			if($user !== false){
-				$allRelationsSql = getAllRelationsSQL();
+				$allRelationsSql = Database\getAllRelationsSQL();
 				if($where != "") $where.=" AND";
 				$where.=" ID IN (SELECT post_id from ($allRelationsSql) as cur WHERE cur.user_id = $user_id ) ";
 			}

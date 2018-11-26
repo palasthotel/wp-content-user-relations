@@ -8,7 +8,6 @@
 
 namespace ContentUserRelations;
 
-use function PHPSTORM_META\type;
 
 class MigrateDestination extends \ph_destination {
 
@@ -19,13 +18,13 @@ class MigrateDestination extends \ph_destination {
 
 	// update and delete
 	public function getItemByID( $id ) {
-		return \ContentUserRelations\getRelationById( $id );
+		return Database\getRelationById( $id );
 	}
 
 	// update and create
 	public function save( $item ) {
 
-		$typestate_id = \ContentUserRelations\getTypeStateId(
+		$typestate_id = Database\getTypeStateId(
 			$item->type_slug,
 			$item->state_slug
 		);
@@ -35,7 +34,7 @@ class MigrateDestination extends \ph_destination {
 			$id = $item->id;
 
 			if($typestate_id != $item->typestate_id){
-				\ContentUserRelations\updateRelation(
+				Database\updateRelation(
 					$id,
 					$item->user_id,
 					$item->post_id,
@@ -44,11 +43,11 @@ class MigrateDestination extends \ph_destination {
 			}
 		} else {
 			// If there's no item
-			$relation_id = getRelationId($item->user_id, $item->post_id, $typestate_id);
+			$relation_id = Database\getRelationId($item->user_id, $item->post_id, $typestate_id);
 			if($relation_id != null){
 				return null;
 			}
-			$id = \ContentUserRelations\addRelation(
+			$id = Database\addRelation(
 				$item->user_id,
 				$item->post_id,
 				$item->type_slug,
@@ -62,7 +61,7 @@ class MigrateDestination extends \ph_destination {
 
 	// delete
 	public function deleteItem( $item ) {
-		\ContentUserRelations\removeRelation(
+		Database\removeRelation(
 			$item->user_id,
 			$item->post_id,
 			$item->type_slug,

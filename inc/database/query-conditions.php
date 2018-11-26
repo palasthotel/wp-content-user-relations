@@ -6,7 +6,7 @@
  * Time: 15:22
  */
 
-namespace ContentUserRelations;
+namespace ContentUserRelations\Database;
 
 
 class QueryConditions {

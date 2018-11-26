@@ -35,12 +35,12 @@ class WPUserQueryExtension {
 		/**
 		 * for valid args have a look in QueryConditions class
 		 */
-		$queryConditions = new QueryConditions($query->query_vars[self::ARG_CONTENT_RELATIONS]);
+		$queryConditions = new Database\QueryConditions($query->query_vars[self::ARG_CONTENT_RELATIONS]);
 		$conditions = $queryConditions->get_sql();
 
 		if("" == $conditions) return;
 
-		$allRelations = getAllRelationsSQL();
+		$allRelations = Database\getAllRelationsSQL();
 		$relation_where = " ID IN ( SELECT user_id FROM ($allRelations) as contentrelations WHERE $conditions ) ";
 
 		$and = "";

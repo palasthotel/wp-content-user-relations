@@ -83,7 +83,7 @@ class Settings {
 		if ( isset( $_POST["submit_new_type"] ) ) {
 			$slug = urldecode( rtrim( sanitize_title( $_POST["cur_slug"] ) ) );
 			$name = rtrim( sanitize_text_field( $_POST["cur_name"] ) );
-			addRelationType( $slug, $name );
+			Database\addRelationType( $slug, $name );
 			$url = add_query_arg( array(
 				"page" => self::MENU_SLUG,
 				// TODO: redirect to edit page? "cur_type" => $type->id,
@@ -94,7 +94,7 @@ class Settings {
 		if ( isset( $_POST["submit_new_state"] ) ) {
 			$slug = urldecode( rtrim( sanitize_title( $_POST["cur_slug"] ) ) );
 			$name = rtrim( sanitize_text_field( $_POST["cur_name"] ) );
-			addRelationState( $slug, $name );
+			Database\addRelationState( $slug, $name );
 			$url = add_query_arg( array(
 				"page" => self::MENU_SLUG,
 				// TODO: redirect to edit page? "cur_state" => $state->id,
@@ -108,8 +108,8 @@ class Settings {
 			$new_states = $_POST["states"];
 			if(!is_array($new_states)) return;
 
-			$all_states = getRelationStates();
-			$old_states = getRelationStates($type_id);
+			$all_states = Database\getRelationStates();
+			$old_states = Database\getRelationStates($type_id);
 			$changes = (object)array(
 				"delete" => array(),
 				"add" => array(),
@@ -126,10 +126,10 @@ class Settings {
 				}
 			}
 			foreach($changes->add as $state_id){
-				addRelationTypeState($type_id, $state_id);
+				Database\addRelationTypeState($type_id, $state_id);
 			}
 			foreach ($changes->delete as $state_id){
-				removeRelationTypeState($type_id, $state_id);
+				Database\removeRelationTypeState($type_id, $state_id);
 			}
 		}
 		// add type to state
@@ -139,8 +139,8 @@ class Settings {
 			$new_types = $_POST["types"];
 			if(!is_array($new_types)) return;
 
-			$all_types = getRelationTypes();
-			$old_types = getRelationTypes($state_id);
+			$all_types = Database\getRelationTypes();
+			$old_types = Database\getRelationTypes($state_id);
 			$changes = (object)array(
 				"delete" => array(),
 				"add" => array(),
@@ -157,10 +157,10 @@ class Settings {
 				}
 			}
 			foreach($changes->add as $type_id){
-				addRelationTypeState($type_id, $state_id);
+				Database\addRelationTypeState($type_id, $state_id);
 			}
 			foreach ($changes->delete as $type_id){
-				removeRelationTypeState($type_id, $state_id);
+				Database\removeRelationTypeState($type_id, $state_id);
 			}
 		}
 	}
@@ -228,7 +228,7 @@ class Settings {
 		<h2>Types</h2>
 		<ul>
 			<?php
-			$types = getRelationTypes();
+			$types = Database\getRelationTypes();
 			foreach ( $types as $type ) {
 				$name = $type->name;
 				$slug = $type->slug;
@@ -260,7 +260,7 @@ class Settings {
 		<h2>States</h2>
 		<ul>
 			<?php
-			$states = getRelationStates();
+			$states = Database\getRelationStates();
 			foreach ( $states as $state ) {
 				$name = $state->name;
 				$slug = $state->slug;
@@ -289,7 +289,7 @@ class Settings {
 
 	function renderTypeStates( $type_id ) {
 
-		$type     = getRelationType($type_id, 'id');
+		$type     = Database\getRelationType($type_id, 'id');
 		$typeName = $type->name;
 		$typeSlug = $type->slug;
 		echo "<h2>$typeName <small>[$typeSlug]</small></h2>";
@@ -299,8 +299,8 @@ class Settings {
 			<input type="hidden" value="<?php echo $type->id; ?>" name="type_id" />
 			<?php
 
-			$states      = getRelationStates();
-			$type_states = getRelationStates( $type->id );
+			$states      = Database\getRelationStates();
+			$type_states = Database\getRelationStates( $type->id );
 			echo "<ul>";
 			foreach ( $states as $state ) {
 				$stateId = $state->id;
@@ -334,7 +334,7 @@ class Settings {
 
 	function renderStateTypes( $state_id ) {
 
-		$state     = getRelationState($state_id, 'id');
+		$state     = Database\getRelationState($state_id, 'id');
 		$name = $state->name;
 		$slug = $state->slug;
 
@@ -345,8 +345,8 @@ class Settings {
 			<input type="hidden" value="<?php echo $state->id; ?>" name="state_id" />
 			<?php
 
-			$types      = getRelationTypes();
-			$state_types = getRelationTypes( $state->id );
+			$types      = Database\getRelationTypes();
+			$state_types = Database\getRelationTypes( $state->id );
 			echo "<ul>";
 			foreach ( $types as $type ) {
 				$typeId = $type->id;

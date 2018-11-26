@@ -6,7 +6,7 @@
  * Time: 15:09
  */
 
-namespace ContentUserRelations;
+namespace ContentUserRelations\Database;
 
 
 class Query {

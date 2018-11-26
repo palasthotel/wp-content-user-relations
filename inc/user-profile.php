@@ -88,14 +88,14 @@ class UserProfile {
 					<select name="cur-new-relation-typestate-id">
 						<option value="">Please choose a relation</option>
 						<?php
-						$types = getRelationTypes();
+						$types = Database\getRelationTypes();
 						foreach ( $types as $type ) {
 							$typeName = $type->name;
 							$typeSlug = $type->slug;
 							echo "<optgroup label='$typeName [$typeSlug]'>";
-							$states = getRelationStates( $type->id );
+							$states = Database\getRelationStates( $type->id );
 							foreach ( $states as $state ) {
-								$typestateId = getTypeStateId( $type->slug, $state->slug );
+								$typestateId = Database\getTypeStateId( $type->slug, $state->slug );
 								$stateName   = $state->name;
 								$stateSlug   = $state->slug;
 								echo "<option value='$typestateId'>$stateName [$stateSlug]</option>";
@@ -124,7 +124,7 @@ class UserProfile {
 					<th><a href="<?php echo get_edit_post_link(); ?>"><?php the_title(); ?></a></th>
 					<td data-content-id="<?php the_ID(); ?>">
 						<?php
-							$relationsQuery = new Query(array(
+							$relationsQuery = new Database\Query(array(
 								"user_id" => $user->ID,
 								"post_id" => get_the_ID(),
 							));
@@ -161,7 +161,7 @@ class UserProfile {
 			$typestate_id = intval( $_POST["cur-new-relation-typestate-id"] );
 
 			if ( $content_id > 0 && $typestate_id > 0 ) {
-				addRelationWithTypeState( $user_id, $content_id, $typestate_id );
+				Database\addRelationWithTypeState( $user_id, $content_id, $typestate_id );
 			}
 		}
 		if(
@@ -177,7 +177,7 @@ class UserProfile {
 			if(!is_array($contents) || !is_array($types) || !is_array($states)) return;
 
 			foreach ($contents as $idx => $content_id){
-				removeRelation($user_id, $content_id, $types[$idx], $states[$idx] );
+				Database\removeRelation($user_id, $content_id, $types[$idx], $states[$idx] );
 			}
 
 		}

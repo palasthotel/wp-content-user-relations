@@ -45,7 +45,7 @@ class PostMetaBox {
 	 */
 	function render(){
 
-		$relations = new Query(array(
+		$relations = new Database\Query(array(
 			"post_id" => get_the_ID(),
 		));
 

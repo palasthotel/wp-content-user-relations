@@ -22,8 +22,8 @@ class Plugin {
 
 	const DOMAIN = "content-user-relations";
 
-	const HANDLE_API_JS = "content-relations-js-api";
-	const HANDLE_USER_PROFILE_JS = "content-relations-js-user-profile";
+	const HANDLE_API_JS = "content-user-relations-js-api";
+	const HANDLE_USER_PROFILE_JS = "content-user-relations-js-user-profile";
 
 	/**
 	 * @var Plugin|null
@@ -50,9 +50,9 @@ class Plugin {
 		$this->migrate = new MigrateInit();
 
 		//base functions and classes
-		require_once dirname(__FILE__)."/inc/tables.php";
-		require_once dirname(__FILE__)."/inc/query-conditions.php";
-		require_once dirname(__FILE__)."/inc/query.php";
+		require_once dirname(__FILE__)."/inc/database/db.php";
+		require_once dirname(__FILE__)."/inc/database/query-conditions.php";
+		require_once dirname(__FILE__)."/inc/database/query.php";
 
 		//WP_User_Query extension
 		require_once dirname(__FILE__)."/inc/wp-user-query-extension.php";
