@@ -66,6 +66,13 @@ class UserProfile {
 					Plugin::HANDLE_API_JS,
 				)
 			);
+			wp_localize_script(
+					Plugin::HANDLE_USER_PROFILE_JS,
+					"ContentUserRelations_Profile",
+					array(
+						"test" => 1,
+					)
+			);
 		}
 	}
 
@@ -73,20 +80,25 @@ class UserProfile {
 	 * @param \WP_User $user
 	 */
 	function render($user) {
-		echo "<h2>Relations</h2>";
+		echo "<h2>".__('Content relations', Plugin::DOMAIN)."</h2>";
 
 		?>
 		<table id="cur-table" class="form-table">
 
 			<tr class="cur-row">
-				<th><label for="cur-content-autocomplete">Add relation to
-						content</label></th>
+				<th>
+					<label for="cur-content-autocomplete">
+						<?php
+						_e('Add relation to content', Plugin::DOMAIN);
+						?>
+					</label>
+				</th>
 				<td>
 					<input type="text" id="cur-content-autocomplete"/>
 					<input type="hidden" id="cur-new-relation-content-id"
 					       name="cur-new-relation-content-id" value=""/>
 					<select name="cur-new-relation-typestate-id">
-						<option value="">Please choose a relation</option>
+						<option value=""><?php _e('Please choose a relation type', Plugin::DOMAIN); ?></option>
 						<?php
 						$types = Database\getRelationTypes();
 						foreach ( $types as $type ) {
@@ -105,7 +117,9 @@ class UserProfile {
 						}
 						?>
 					</select>
-					<p class="description">Save profile to add relation.</p>
+					<p class="description">
+						<?php _e('Save profile to add relation.',Plugin::DOMAIN) ?>
+					</p>
 				</td>
 			</tr>
 
@@ -113,6 +127,7 @@ class UserProfile {
 
 			$args = array(
 				"post_type" => "any",
+				WPPostQueryExtension::ARG_USER_RELATABLE => true,
 			);
 			$args[WPPostQueryExtension::ARG_RELATED_TO_USER] = $user->ID;
 			$query = new \WP_Query($args);

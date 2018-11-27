@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Content User Relations\n"
-"POT-Creation-Date: 2018-11-27 12:57+0100\n"
-"PO-Revision-Date: 2018-11-27 12:57+0100\n"
+"POT-Creation-Date: 2018-11-27 19:47+0100\n"
+"PO-Revision-Date: 2018-11-27 19:50+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -44,7 +44,7 @@ msgstr "Entfernen"
 msgid "Don't remove"
 msgstr "Doch nicht"
 
-#: inc/post-meta-box.php:100
+#: inc/post-meta-box.php:103
 msgid "Content user relations"
 msgstr "Inhalt-Benutzer Beziehungen"
 
@@ -115,6 +115,22 @@ msgstr ""
 #: inc/settings.php:391
 msgid "Back to overview"
 msgstr "Zurück zur Übersicht"
+
+#: inc/user-profile.php:83
+msgid "Content relations"
+msgstr "Inhaltsbeziehungen"
+
+#: inc/user-profile.php:92
+msgid "Add relation to content"
+msgstr "Beziehung zu Inhalt erstellen."
+
+#: inc/user-profile.php:101
+msgid "Please choose a relation type"
+msgstr "Wähle einen Inhaltsbeziehungstyp"
+
+#: inc/user-profile.php:121
+msgid "Save profile to add relation."
+msgstr "Speichere das Profil um die Inhaltsbeziehung zu speichern."
 
 #. Plugin Name of the plugin/theme
 msgid "Content User Relations"

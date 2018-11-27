@@ -91,6 +91,9 @@ class PostMetaBox {
 						'remove' => self::CUR_ACTION_REMOVE,
 						'add'    => self::CUR_ACTION_ADD,
 					),
+					'links' => array(
+						'user_profile' => add_query_arg( 'user_id', '%uid%', self_admin_url( 'user-edit.php' ) ),
+					),
 					'ready_to_save_value'     => self::READY_TO_SAVE_VALUE,
 					'app_root_id'             => self::APP_ROOT_ID,
 				)

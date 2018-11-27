@@ -9,6 +9,7 @@
 	const POST = data.POST;
 	const ACTION = data.ACTION;
 	const ready_to_save_value = data.ready_to_save_value;
+	const links = data.links;
 	const $app = $(`#${data.app_root_id}`);
 
 	// ----------------------------
@@ -92,7 +93,9 @@
 		const name = user.display_name;
 		const $row = $(`
 <tr>
-	<td class="name column-name">${name}</td>
+	<td class="name column-name">
+		<a href="${getUserProfileLink(user.user_id)}" target="_blank">${name}</a>
+	</td>
 	<td class="relations column-relations"></td>
 </tr>`).attr('id', 'cur-user-row-' + user.user_id).addClass('cur-user_row');
 
@@ -185,6 +188,10 @@
 
 	function findUserRow(user_id) {
 		return $tbody.find(`#cur-user-row-${user_id}`);
+	}
+
+	function getUserProfileLink(user_id){
+		return links.user_profile.replace('%uid%', user_id);
 	}
 
 	// ----------------------------

@@ -1,5 +1,4 @@
-(function($, api){
-
+(function($, api, data){
 
 	var table_id = "cur-table";
 	var autocomplete_id = "cur-content-autocomplete";
@@ -44,7 +43,7 @@
 		};
 
 		$table.on("click",".cur-states__item", function(){
-			var $item = $(this)
+			const $item = $(this);
 			$item.toggleClass("is-deleted");
 
 			if($item.hasClass("is-deleted")){
@@ -87,4 +86,4 @@
 	}
 
 
-})(jQuery, ContentUserRelations_API);
+})(jQuery, ContentUserRelations_API, ContentUserRelations_Profile);
