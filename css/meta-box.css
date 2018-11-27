@@ -1,46 +1,32 @@
-.cur-users{
+.cur-user__name { font-weight: bold; }
 
-}
-.cur-user__name{
-	font-weight: bold;
-}
-.cur-relations{
-	margin-left: 15px;
-}
+.cur-relations { margin-left: 15px; }
 
+.cur-types__item { margin-bottom: 16px; }
 
-.cur-types{
+.cur-types__item--name { border-bottom: 1px solid #d3d3d3; margin-bottom: 8px; }
 
-}
-.cur-types__item{
-	margin-bottom: 16px;
-}
-.cur-types__item--name{
-	border-bottom: 1px solid #d3d3d3;
-	margin-bottom: 8px;
-}
-.cur-states{
-	margin-left: 20px;
-}
-.cur-states__item--name{
+.cur-states { margin-left: 20px; }
 
-}
+#cur-app .cur-user_row .column-name { font-weight: bold; }
 
-#cur-user-autocomplete{
-	margin: 8px 0;
-}
-#cur-user-autocomplete label{
-	font-weight: bold;
-}
-#cur-user-autocomplete input{
-	width: 260px;
-}
-.cur-autocomplete-user-item{
-	border-bottom: 1px solid #eeeeee;
-}
-.user-item__user-email{
-	font-size: 0.8em;
-}
-.user-item__ID{
-	font-size: 0.8em;
-}
+#cur-app .cur-user_row.will-be-deleted .column-name { text-decoration: line-through; }
+
+#cur-app .cur-relations_list { margin: 0; }
+
+#cur-app .cur-relations__item + .cur-relations__item { border-top: 1px solid #eee; }
+
+#cur-app .cur-relations__item.will-be-deleted .name { text-decoration: line-through; }
+
+#cur-user-autocomplete { margin: 8px 0; }
+
+#cur-user-autocomplete label { font-weight: bold; }
+
+#cur-user-autocomplete input { width: 260px; }
+
+.cur-autocomplete-user-item { border-bottom: 1px solid #eeeeee; }
+
+.user-item__user-email { font-size: 0.8em; }
+
+.user-item__ID { font-size: 0.8em; }
+/*# sourceMappingURL=meta-box.css.map */
