@@ -47,7 +47,7 @@
 	 * @return {element}
 	 */
 	function buildRemove() {
-		return $("<button></button>").text(i18n.remove).addClass("remove");
+		return $("<a></a>").text(i18n.remove).addClass("remove");
 	}
 
 	/**
@@ -173,7 +173,7 @@
 	// ----------------------------
 	// event handlers
 	// ----------------------------
-	$app.on("click", "button.remove", function(e){
+	$app.on("click", "a.remove", function(e){
 		e.preventDefault();
 		const $btn = $(this);
 		const $relation_row = $btn.closest("li");
@@ -252,10 +252,16 @@
 	function initAutocomplete($autocomplete, $stateTypeSelect) {
 
 		if(!$autocomplete.is("input")) $autocomplete = $autocomplete.find("input").first();
-
+		const cache = {};
 		$autocomplete.autocomplete({
 			source: function(request, response) {
+				const term = request.term;
+				if(term in cache){
+					response(cache[term]);
+					return;
+				}
 				api.findRelatableUsers(request.term, function(data) {
+					cache[term] = data.users;
 					response(data.users);
 				});
 			},
@@ -265,6 +271,10 @@
 			},
 			delay: 500,
 			minLength: 3,
+		});
+
+		$autocomplete.on("click", function(){
+			$autocomplete.autocomplete('instance').search($autocomplete.val());
 		});
 
 		$autocomplete.autocomplete('instance')._renderItem = function(ul, item) {

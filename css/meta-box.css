@@ -18,6 +18,12 @@
 
 #cur-app .cur-relations__item + .cur-relations__item { border-top: 1px solid #eee; }
 
+#cur-app .cur-relations__item .remove { margin-left: 10px; color: #a00; cursor: pointer; text-decoration: underline; }
+
+#cur-app .cur-relations__item .remove:hover { text-decoration: none; }
+
+#cur-app .cur-relations__item.will-be-removed .remove { color: #0073aa; }
+
 #cur-app .cur-relations__item.will-be-removed .name { text-decoration: line-through; }
 
 #cur-app .cur-relations__item.will-be-added .name { color: green; }

@@ -50,8 +50,20 @@
 	}
 	.cur-relations__item{
 
+		.remove{
+			margin-left: 10px;
+			color: #a00;
+			cursor: pointer;
+			text-decoration: underline;
+			&:hover{
+				text-decoration: none;
+			}
+		}
 
 		&.will-be-removed{
+			.remove{
+				color: #0073aa;
+			}
 			.name{
 				text-decoration: line-through;
 			}
