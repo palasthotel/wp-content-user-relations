@@ -172,8 +172,8 @@ class Settings {
 		if($this->currentUserCanModify()){
 			add_submenu_page(
 				self::PARENT_SLUG,
-				__( 'Relations ‹ User', Plugin::DOMAIN ),
-				__( 'Relations', Plugin::DOMAIN ),
+				_x( 'Content relations ‹ User', 'Menu', Plugin::DOMAIN ),
+				_x( 'Content relations', 'Menu', Plugin::DOMAIN ),
 				'manage_options',
 				self::MENU_SLUG,
 				array( $this, 'render_settings' )
@@ -184,17 +184,19 @@ class Settings {
 	function render_settings() {
 		echo '<div class="wrap">';
 		if ( isset( $_GET[ self::PARAM_TYPE ] ) ) {
-			$this->renderBackToOverview("Type");
+			$this->renderBackToOverview(_x("Relation type",'settings', Plugin::DOMAIN));
 			$this->renderTypeStates( intval( $_GET[ self::PARAM_TYPE ] ) );
 		} else if( isset( $_GET[ self::PARAM_STATE ] ) ){
-			$this->renderBackToOverview("State");
+			$this->renderBackToOverview(_x("Typestate",'settings', Plugin::DOMAIN));
 			$this->renderStateTypes( intval( $_GET[ self::PARAM_STATE ] ) );
 		} else {
-			$this->renderPostTypes();
-			echo "<hr>";
+
+
 			$this->renderTypes();
 			echo "<hr>";
 			$this->renderStates();
+			echo "<hr>";
+			$this->renderPostTypes();
 		}
 		echo '</div>';
 	}
@@ -202,7 +204,7 @@ class Settings {
 	function renderPostTypes(){
 		?>
 		<h2><?php _e('Post types', Plugin::DOMAIN); ?></h2>
-		<p>Show meta box for the following post types.</p>
+		<p><?php _e('Show meta box for the following post types.', Plugin::DOMAIN); ?></p>
 		<form method="post">
 		<?php
 		$post_types = get_post_types( array(
@@ -215,7 +217,7 @@ class Settings {
 			$checked = ($this->isPostTypeEnabled($name))? "checked": "";
 			echo "<label>";
 			echo "<input type='checkbox' $checked value='$name' name='post_types[]' /> $label <small>[$name]</small> ";
-			echo "</label>";
+			echo "</label><br>";
 		}
 		submit_button(__("Save", Plugin::DOMAIN), 'primary', 'save_post_types');
 		?>
@@ -225,7 +227,7 @@ class Settings {
 
 	function renderTypes() {
 		?>
-		<h2>Types</h2>
+		<h2><?php _e('Relation types',Plugin::DOMAIN) ?></h2>
 		<ul>
 			<?php
 			$types = Database\getRelationTypes();
@@ -241,7 +243,7 @@ class Settings {
 			?>
 		</ul>
 		<form method="post">
-			<h3>New type</h3>
+			<h3><?php _e('New type', Plugin::DOMAIN) ?></h3>
 			<label>
 				Name
 				<input type="text" name="cur_name"/>
@@ -250,14 +252,14 @@ class Settings {
 				Slug
 				<input type="text" name="cur_slug"/>
 			</label>
-			<?php submit_button( __("Save", Plugin::DOMAIN), "primary", "submit_new_type", false ); ?>
+			<?php submit_button( __("Add", Plugin::DOMAIN), "primary", "submit_new_type", false ); ?>
 		</form>
 		<?php
 	}
 
 	function renderStates() {
 		?>
-		<h2>States</h2>
+		<h2><?php _e('Typestates', Plugin::DOMAIN); ?></h2>
 		<ul>
 			<?php
 			$states = Database\getRelationStates();
@@ -282,7 +284,7 @@ class Settings {
 				Slug
 				<input type="text" name="cur_slug"/>
 			</label>
-			<?php submit_button( __("Save", Plugin::DOMAIN), "primary", "submit_new_state", false ); ?>
+			<?php submit_button( __("Add", Plugin::DOMAIN), "primary", "submit_new_state", false ); ?>
 		</form>
 		<?php
 	}

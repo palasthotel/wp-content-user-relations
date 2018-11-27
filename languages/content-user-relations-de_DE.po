@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Content User Relations\n"
-"POT-Creation-Date: 2018-11-27 12:45+0100\n"
-"PO-Revision-Date: 2018-11-27 12:45+0100\n"
+"POT-Creation-Date: 2018-11-27 12:57+0100\n"
+"PO-Revision-Date: 2018-11-27 12:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "User"
 msgstr "Nutzer"
 
-#: inc/post-meta-box.php:75 inc/settings.php:176
+#: inc/post-meta-box.php:75
 msgid "Relations"
 msgstr "Beziehungen"
 
@@ -49,26 +49,62 @@ msgid "Content user relations"
 msgstr "Inhalt-Benutzer Beziehungen"
 
 #: inc/settings.php:175
-msgid "Relations ‹ User"
+msgctxt "Menu"
+msgid "Content relations ‹ User"
 msgstr "Inhaltsbeziehungen ‹ Benutzer"
 
-#: inc/settings.php:204
+#: inc/settings.php:176
+msgctxt "Menu"
+msgid "Content relations"
+msgstr "Inhaltsbeziehungen"
+
+#: inc/settings.php:187
+msgctxt "settings"
+msgid "Relation type"
+msgstr "Beziehungstyp"
+
+#: inc/settings.php:190
+msgctxt "settings"
+msgid "Typestate"
+msgstr "Typstatus"
+
+#: inc/settings.php:206
 msgid "Post types"
 msgstr "Inhaltstypen"
 
-#: inc/settings.php:220 inc/settings.php:253 inc/settings.php:285
+#: inc/settings.php:207
+msgid "Show meta box for the following post types."
+msgstr "Zeige die MetaBox an den folgenden Post Typen."
+
+#: inc/settings.php:222
 msgid "Save"
 msgstr "Speichern"
 
-#: inc/settings.php:276
+#: inc/settings.php:230
+msgid "Relation types"
+msgstr "Beziehungstypen"
+
+#: inc/settings.php:246
+msgid "New type"
+msgstr "Neuer Typ"
+
+#: inc/settings.php:255 inc/settings.php:287
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: inc/settings.php:262
+msgid "Typestates"
+msgstr "Typenstatus"
+
+#: inc/settings.php:278
 msgid "New state"
 msgstr "Neuer Status"
 
-#: inc/settings.php:317
+#: inc/settings.php:319
 msgid "Save states for type"
 msgstr "Speichere Statusliste für Typ"
 
-#: inc/settings.php:325
+#: inc/settings.php:327
 msgid ""
 "If you uncheck a state and save all user content relations to this type "
 "state relation will get lost 🚨!"
@@ -76,7 +112,7 @@ msgstr ""
 "Wenn du einen Status aus der Liste entfernst gehen alle Verbindungen zu "
 "Benutzern dieser Typ-Status Kombination verloren 🚨!"
 
-#: inc/settings.php:389
+#: inc/settings.php:391
 msgid "Back to overview"
 msgstr "Zurück zur Übersicht"
 
@@ -96,6 +132,21 @@ msgstr "Speichere Benutzerbeziehungen zu Inhalten"
 #. Author of the plugin/theme
 msgid "Palasthotel <edward.bock@palasthotel.de>"
 msgstr ""
+
+#~ msgctxt "settings"
+#~ msgid "Type"
+#~ msgstr "Typ"
+
+#~ msgctxt "settings"
+#~ msgid "State"
+#~ msgstr "Status"
+
+#~ msgid "Relations ‹ User"
+#~ msgstr "Inhaltsbeziehungen ‹ Benutzer"
+
+#~ msgctxt "Menu"
+#~ msgid "Relations"
+#~ msgstr "Inhaltsbeziehungen"
 
 #~ msgid ""
 #~ "If you uncheck a state and save all user content relations to this type "
