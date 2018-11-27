@@ -201,7 +201,7 @@ class Settings {
 
 	function renderPostTypes(){
 		?>
-		<h2>Post types</h2>
+		<h2><?php _e('Post types', Plugin::DOMAIN); ?></h2>
 		<p>Show meta box for the following post types.</p>
 		<form method="post">
 		<?php
@@ -217,7 +217,7 @@ class Settings {
 			echo "<input type='checkbox' $checked value='$name' name='post_types[]' /> $label <small>[$name]</small> ";
 			echo "</label>";
 		}
-		submit_button("Save", 'primary', 'save_post_types');
+		submit_button(__("Save", Plugin::DOMAIN), 'primary', 'save_post_types');
 		?>
 		</form>
 		<?php
@@ -250,7 +250,7 @@ class Settings {
 				Slug
 				<input type="text" name="cur_slug"/>
 			</label>
-			<?php submit_button( "Save", "primary", "submit_new_type", false ); ?>
+			<?php submit_button( __("Save", Plugin::DOMAIN), "primary", "submit_new_type", false ); ?>
 		</form>
 		<?php
 	}
@@ -273,7 +273,7 @@ class Settings {
 			?>
 		</ul>
 		<form method="post">
-			<h3>New state</h3>
+			<h3><?php _e('New state', Plugin::DOMAIN); ?></h3>
 			<label>
 				Name
 				<input type="text" name="cur_name"/>
@@ -282,7 +282,7 @@ class Settings {
 				Slug
 				<input type="text" name="cur_slug"/>
 			</label>
-			<?php submit_button( "Save", "primary", "submit_new_state", false ); ?>
+			<?php submit_button( __("Save", Plugin::DOMAIN), "primary", "submit_new_state", false ); ?>
 		</form>
 		<?php
 	}
@@ -314,14 +314,16 @@ class Settings {
 			}
 			echo "</ul>";
 
-			submit_button( "Save states for type", 'primary', 'submit_type_states' );
+			submit_button( __("Save states for type", Plugin::DOMAIN), 'primary', 'submit_type_states' );
 			?>
 			<script>
 				(function($){
 					$(function(){
 						$("body").on("change","input[data-delete-warning]", function(e){
 							if(!$(this).prop("checked")){
-								alert("If you uncheck a state and save all user content relations to this type state relation will get lost!");
+								alert(
+									"<?php _e('If you uncheck a state and save all user content relations to this type state relation will get lost 🚨!',Plugin::DOMAIN); ?>"
+								);
 							}
 						});
 					});

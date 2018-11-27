@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Content User Relations\n"
-"POT-Creation-Date: 2018-11-27 12:35+0100\n"
-"PO-Revision-Date: 2018-11-27 12:36+0100\n"
+"POT-Creation-Date: 2018-11-27 12:45+0100\n"
+"PO-Revision-Date: 2018-11-27 12:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -52,7 +52,31 @@ msgstr "Inhalt-Benutzer Beziehungen"
 msgid "Relations ‹ User"
 msgstr "Inhaltsbeziehungen ‹ Benutzer"
 
-#: inc/settings.php:387
+#: inc/settings.php:204
+msgid "Post types"
+msgstr "Inhaltstypen"
+
+#: inc/settings.php:220 inc/settings.php:253 inc/settings.php:285
+msgid "Save"
+msgstr "Speichern"
+
+#: inc/settings.php:276
+msgid "New state"
+msgstr "Neuer Status"
+
+#: inc/settings.php:317
+msgid "Save states for type"
+msgstr "Speichere Statusliste für Typ"
+
+#: inc/settings.php:325
+msgid ""
+"If you uncheck a state and save all user content relations to this type "
+"state relation will get lost 🚨!"
+msgstr ""
+"Wenn du einen Status aus der Liste entfernst gehen alle Verbindungen zu "
+"Benutzern dieser Typ-Status Kombination verloren 🚨!"
+
+#: inc/settings.php:389
 msgid "Back to overview"
 msgstr "Zurück zur Übersicht"
 
@@ -72,6 +96,13 @@ msgstr "Speichere Benutzerbeziehungen zu Inhalten"
 #. Author of the plugin/theme
 msgid "Palasthotel <edward.bock@palasthotel.de>"
 msgstr ""
+
+#~ msgid ""
+#~ "If you uncheck a state and save all user content relations to this type "
+#~ "state relation will get lost!"
+#~ msgstr ""
+#~ "Wenn du einen Status aus der Liste entfernst gehen alle Verbindungen zu "
+#~ "Benutzern dieser Typ-Status Kombination verloren!"
 
 #~ msgid "Back to types"
 #~ msgstr "Zurück zu den Typen"
