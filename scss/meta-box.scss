@@ -35,6 +35,11 @@
 				text-decoration: line-through;
 			}
 		}
+		&.will-be-added{
+			.column-name{
+				color: green;
+			}
+		}
 	}
 
 	.cur-relations_list{
@@ -49,6 +54,11 @@
 		&.will-be-deleted{
 			.name{
 				text-decoration: line-through;
+			}
+		}
+		&.will-be-added{
+			.name{
+				color: green;
 			}
 		}
 	}

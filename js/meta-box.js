@@ -57,6 +57,7 @@
 	function buildRelationItem(relation) {
 		return $("<li></li>")
 			.addClass("cur-relations__item")
+			.attr("data-typestate-id", relation.typestate_id)
 			.append(
 				$("<span></span>")
 				.text(relation.type_name+" – "+relation.state_name)
@@ -93,7 +94,7 @@
 	<td class="name column-name" data-colname="User">${name}</td>
 	<td class="relations column-relations" data-colname="Relations"></td>
 </tr>`)
-		.data("user-id", user.ID)
+		.attr("id", "cur-user-row-"+user.user_id)
 		.addClass("cur-user_row");
 
 		$row.find(".relations").append(buildRelationsList(user.relations));
@@ -153,14 +154,44 @@
 	}
 
 	// ----------------------------
+	// pure functions
+	// ----------------------------
+	function findActionInput($element){
+		return $element.find(`input[name^="${POST.actions}"]`);
+	}
+	function findRelations($element){
+		return $element.find('.cur-relations_list');
+	}
+	function findRelationsByTypestateId($element, typestate_id){
+		return $element.find(`[data-typestate-id=${typestate_id}]`);
+	}
+	function findUserRow(user_id){
+		return $tbody.find(`#cur-user-row-${user_id}`);
+	}
+
+	// ----------------------------
 	// event handlers
 	// ----------------------------
 	$app.on("click", "button.delete", function(e){
 		e.preventDefault();
 		const $btn = $(this);
 		const $relation_row = $btn.closest("li");
+
+		if($relation_row.hasClass("will-be-added")){
+			if($relation_row.siblings().length < 1){
+				$relation_row.closest("tr").remove();
+				checkEmptyTable();
+				update_parent_modification_state($relation_row);
+			} else {
+				const $parent = $relation_row.parent();
+				$relation_row.remove();
+				update_parent_modification_state($parent);
+			}
+			return;
+		}
+
 		$relation_row.toggleClass("will-be-deleted");
-		const $action = $relation_row.find(`input[name^="${POST.actions}"]`);
+		const $action = findActionInput($relation_row);
 		if($relation_row.hasClass("will-be-deleted")){
 			$action.val(ACTION.delete);
 			$btn.text("dont delete");
@@ -169,32 +200,53 @@
 			$action.val("");
 		}
 
+		update_parent_modification_state($relation_row);
+
+	});
+
+	$app.on("content_user_relations_add_relation", function(e, user, relation){
+		let $user_row = findUserRow(user.ID);
+		relation.typestate_id = relation.id;
+		relation.user_id = user.ID;
+		if($user_row.length < 1){
+			// add new row
+			user.relations = [relation];
+			$user_row = buildRow(user);
+			findActionInput($user_row).val(ACTION.add);
+			findRelations($user_row).children().last().addClass("will-be-added");
+			$user_row.addClass("will-be-added");
+			$tbody.append($user_row);
+			$emptyRow.remove();
+			return;
+		} else if($user_row.length > 1){
+			console.error("Too many rows for user");
+		}
+
+		const $item = findRelationsByTypestateId($user_row, relation.typestate_id);
+		if($item.length > 0){
+			alert("Relation already exists");
+			return;
+		}
+		const $relations_list = findRelations($user_row);
+		// TODO: add relation
+		const $relation = buildRelationItem(relation)
+		.addClass("will-be-added");
+		findActionInput($relation).val(ACTION.add);
+		$relations_list.append($relation);
+
+		update_parent_modification_state($relations_list);
+
+	});
+
+	function update_parent_modification_state($childElement) {
 		// user row visualization
-		const $user_row = $relation_row.closest("tr");
+		const $user_row = $childElement.closest("tr");
 		if($user_row.find('.cur-relations__item.will-be-deleted').length === $user_row.find('.cur-relations__item').length ){
 			$user_row.addClass("will-be-deleted");
 		} else {
 			$user_row.removeClass("will-be-deleted");
 		}
-
-	});
-
-	$app.on("content_user_relations_add_relation", function(e, user, relation){
-		console.log(user, relation);
-		let $user_row = $table.find(`[data-user-id=${user.ID}]`);
-		if($user_row.length < 1){
-			// TODO: create one
-			user.relations = [relation];
-			$user_row = buildRow(user);
-		} else if($user_row.length > 1){
-			console.error("Too many rows for user");
-		}
-
-		console.log($user_row);
-		$emptyRow.remove();
-		$tbody.append($user_row);
-
-	});
+	}
 
 	function initAutocomplete($autocomplete, $stateTypeSelect) {
 
@@ -249,6 +301,12 @@
 
 	}
 
+	function checkEmptyTable() {
+		if($tbody.html() === ""){
+			$tbody.append($emptyRow);
+		}
+	}
+
 	// ----------------------------
 	// init application
 	// ----------------------------
@@ -259,9 +317,8 @@
 	for( let i = 0; i < relations.length; i++){
 		buildRow(relations[i]).appendTo($tbody);
 	}
-	if($tbody.html() === ""){
-		$tbody.append($emptyRow);
-	}
+
+	checkEmptyTable();
 
 	// only save values if javascript has successfully saved state
 	$app.append(buildHiddenField(POST.ready_to_save, ready_to_save_value));

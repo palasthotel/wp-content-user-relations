@@ -12,11 +12,15 @@
 
 #cur-app .cur-user_row.will-be-deleted .column-name { text-decoration: line-through; }
 
+#cur-app .cur-user_row.will-be-added .column-name { color: green; }
+
 #cur-app .cur-relations_list { margin: 0; }
 
 #cur-app .cur-relations__item + .cur-relations__item { border-top: 1px solid #eee; }
 
 #cur-app .cur-relations__item.will-be-deleted .name { text-decoration: line-through; }
+
+#cur-app .cur-relations__item.will-be-added .name { color: green; }
 
 #cur-user-autocomplete { margin: 8px 0; }
 
