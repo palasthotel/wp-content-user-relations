@@ -1,13 +1,3 @@
-.cur-user__name { font-weight: bold; }
-
-.cur-relations { margin-left: 15px; }
-
-.cur-types__item { margin-bottom: 16px; }
-
-.cur-types__item--name { border-bottom: 1px solid #d3d3d3; margin-bottom: 8px; }
-
-.cur-states { margin-left: 20px; }
-
 #cur-app .cur-user_row .column-name { font-weight: bold; }
 
 #cur-app .cur-user_row.will-be-removed .column-name { text-decoration: line-through; }
@@ -17,6 +7,8 @@
 #cur-app .cur-relations_list { margin: 0; }
 
 #cur-app .cur-relations__item + .cur-relations__item { border-top: 1px solid #eee; }
+
+#cur-app .cur-relations__item { margin: 0; padding: 4px 0; }
 
 #cur-app .cur-relations__item .remove { margin-left: 10px; color: #a00; cursor: pointer; text-decoration: underline; }
 
@@ -28,15 +20,15 @@
 
 #cur-app .cur-relations__item.will-be-added .name { color: green; }
 
-#cur-user-autocomplete { margin: 8px 0; }
+#cur-app .cur-controls { padding: 10px 0 0 0; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; }
 
-#cur-user-autocomplete label { font-weight: bold; }
+#cur-app .cur-controls .cur-control + .cur-control { margin-left: 10px; }
 
-#cur-user-autocomplete input { width: 260px; }
+#cur-app .cur-controls .ui-autocomplete-input { width: 260px; }
 
-.cur-autocomplete-user-item { border-bottom: 1px solid #eeeeee; }
+.cur-autocomplete-user-item + .cur-autocomplete-user-item { border-top: 1px solid #eee; }
 
-.user-item__user-email { font-size: 0.8em; }
+.cur-autocomplete-user-item .user-item__user-name { font-weight: bold; }
 
-.user-item__ID { font-size: 0.8em; }
+.cur-autocomplete-user-item .user-item__ID, .cur-autocomplete-user-item .user-item__user-email { font-style: italic; }
 /*# sourceMappingURL=meta-box.css.map */
