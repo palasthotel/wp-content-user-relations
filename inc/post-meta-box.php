@@ -20,7 +20,7 @@ class PostMetaBox {
 
 	const POST_ACTIONS = "cur_actions";
 
-	const CUR_ACTION_DELETE = "delete";
+	const CUR_ACTION_REMOVE = "remove";
 
 	const CUR_ACTION_ADD = "add";
 
@@ -70,6 +70,15 @@ class PostMetaBox {
 			wp_localize_script( Plugin::HANDLE_POST_META_BOX_JS,
 				"ContentUserRelations_MetaBox",
 				array(
+					'i18n' => array(
+						'col_title_user' => __('User', Plugin::DOMAIN),
+						'col_title_relations' => __('Relations', Plugin::DOMAIN),
+						'no_relations_found' => __('No relations found', Plugin::DOMAIN),
+						'label_typestate_select' => __('Relation', Plugin::DOMAIN),
+						'label_autocomplete_users' => __('User', Plugin::DOMAIN),
+						'remove' => __('Remove', Plugin::DOMAIN),
+						'unremove' => __('Don\'t remove', Plugin::DOMAIN),
+					),
 					'relations'               => $this->getPostRelationsGroupByUser( $post->ID ),
 					'typestates'             => $tyeStates,
 					'POST'                    => array(
@@ -79,7 +88,7 @@ class PostMetaBox {
 						'actions'       => self::POST_ACTIONS,
 					),
 					'ACTION'                  => array(
-						'delete' => self::CUR_ACTION_DELETE,
+						'remove' => self::CUR_ACTION_REMOVE,
 						'add'    => self::CUR_ACTION_ADD,
 					),
 					'ready_to_save_value'     => self::READY_TO_SAVE_VALUE,
@@ -178,7 +187,7 @@ class PostMetaBox {
 			$action = $actions[ $i ];
 			if ( $action == self::CUR_ACTION_ADD ) {
 				Database\addRelationWithTypeState( $user_ids[ $i ], $post_id, $typeState_ids[ $i ] );
-			} else if ( $action == self::CUR_ACTION_DELETE ) {
+			} else if ( $action == self::CUR_ACTION_REMOVE ) {
 				Database\removeRelationWithTypeState( $user_ids[ $i ], $post_id, $typeState_ids[ $i ] );
 			}
 		}

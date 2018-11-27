@@ -45,6 +45,13 @@ class Plugin {
 
 		$this->url = plugin_dir_url(__FILE__);
 		$this->path = plugin_dir_path(__FILE__);
+		$this->basename = plugin_basename(__FILE__);
+
+		load_plugin_textdomain(
+			Plugin::DOMAIN,
+			FALSE,
+			dirname( plugin_basename( __FILE__ ) ) . '/languages'
+		);
 
 		// migration
 		require_once dirname(__FILE__)."/inc/migrate/migrate-init.php";

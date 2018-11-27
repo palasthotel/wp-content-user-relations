@@ -3,6 +3,7 @@
 	// ----------------------------
 	// injected vars
 	// ----------------------------
+	const i18n = data.i18n;
 	const relations = data.relations;
 	const typestates = data.typestates;
 	const POST = data.POST;
@@ -42,11 +43,11 @@
 	}
 
 	/**
-	 * build a delete button
+	 * build a remove button
 	 * @return {element}
 	 */
-	function buildDelete() {
-		return $("<button></button>").text("Delete").addClass("delete");
+	function buildRemove() {
+		return $("<button></button>").text(i18n.remove).addClass("remove");
 	}
 
 	/**
@@ -63,7 +64,7 @@
 				.text(relation.type_name+" – "+relation.state_name)
 				.addClass("name")
 			)
-			.append(buildDelete())
+			.append(buildRemove())
 			.append(buildHiddenFields(relation));
 	}
 
@@ -91,8 +92,8 @@
 		const name = user.display_name;
 		const $row = $(`
 <tr>
-	<td class="name column-name" data-colname="User">${name}</td>
-	<td class="relations column-relations" data-colname="Relations"></td>
+	<td class="name column-name">${name}</td>
+	<td class="relations column-relations"></td>
 </tr>`)
 		.attr("id", "cur-user-row-"+user.user_id)
 		.addClass("cur-user_row");
@@ -107,7 +108,7 @@
 	 * @return {element}
 	 */
 	function buildEmptyRow() {
-		return $(`<tr class="no-items"><td class="colspanchange" colspan="3">No relations found</td></tr>`)
+		return $(`<tr class="no-items"><td class="colspanchange" colspan="3">${i18n.no_relations_found}</td></tr>`)
 	}
 
 	/**
@@ -118,7 +119,7 @@
 		return $(`<table class="wp-list-table widefat fixed striped relatedmembers">
             <thead>
 	            <tr>
-	                <th scope="col">User</th><th scope="col">Relations</th>           
+	                <th scope="col">${i18n.col_title_user}</th><th scope="col">${i18n.col_title_relations}</th>           
 	            </tr>
             </thead>
             <tbody></tbody>
@@ -131,7 +132,7 @@
 	 * @return {element}
 	 */
 	function buildRelationTypeSelect(typestates) {
-		const $wrapper = $(`<label class='cur-relation-type-label' for='cur-state-type-select'>Relation: 
+		const $wrapper = $(`<label class='cur-relation-type-label' for='cur-state-type-select'>${i18n.label_typestate_select}: 
 <select id='cur-state-type-select'></select></label>`);
 		const $select = $wrapper.find("select");
 		for(let i = 0; i < typestates.length; i++){
@@ -150,7 +151,7 @@
 	 * @return {element}
 	 */
 	function buildAutocompleteControl(){
-		return $(`<label for="cur-autocomplete">User: <input type="text" id="cur-autocomplete" name="cur_user_autocomplete" /></label>`)
+		return $(`<label for="cur-autocomplete">${i18n.label_autocomplete_users}: <input type="text" id="cur-autocomplete" name="cur_user_autocomplete" /></label>`)
 	}
 
 	// ----------------------------
@@ -172,7 +173,7 @@
 	// ----------------------------
 	// event handlers
 	// ----------------------------
-	$app.on("click", "button.delete", function(e){
+	$app.on("click", "button.remove", function(e){
 		e.preventDefault();
 		const $btn = $(this);
 		const $relation_row = $btn.closest("li");
@@ -190,13 +191,13 @@
 			return;
 		}
 
-		$relation_row.toggleClass("will-be-deleted");
+		$relation_row.toggleClass("will-be-removed");
 		const $action = findActionInput($relation_row);
-		if($relation_row.hasClass("will-be-deleted")){
+		if($relation_row.hasClass("will-be-removed")){
 			$action.val(ACTION.delete);
-			$btn.text("dont delete");
+			$btn.text(i18n.unremove);
 		} else {
-			$btn.text("delete");
+			$btn.text(i18n.remove);
 			$action.val("");
 		}
 
@@ -241,10 +242,10 @@
 	function update_parent_modification_state($childElement) {
 		// user row visualization
 		const $user_row = $childElement.closest("tr");
-		if($user_row.find('.cur-relations__item.will-be-deleted').length === $user_row.find('.cur-relations__item').length ){
-			$user_row.addClass("will-be-deleted");
+		if($user_row.find('.cur-relations__item.will-be-removed').length === $user_row.find('.cur-relations__item').length ){
+			$user_row.addClass("will-be-removed");
 		} else {
-			$user_row.removeClass("will-be-deleted");
+			$user_row.removeClass("will-be-removed");
 		}
 	}
 

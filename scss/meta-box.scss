@@ -30,7 +30,7 @@
 		.column-name{
 			font-weight: bold;
 		}
-		&.will-be-deleted{
+		&.will-be-removed{
 			.column-name{
 				text-decoration: line-through;
 			}
@@ -51,7 +51,7 @@
 	.cur-relations__item{
 
 
-		&.will-be-deleted{
+		&.will-be-removed{
 			.name{
 				text-decoration: line-through;
 			}
