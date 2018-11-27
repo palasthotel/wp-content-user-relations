@@ -31,16 +31,6 @@ class PostMetaBox {
 
 	const APP_ROOT_ID = "cur-app";
 
-	const AUTOCOMPLETE_APP_ROOT_ID = "cur-user-autocomplete";
-
-	const AUTOCOMPLETE_INPUT_NAME = "cur_user_autocomplete_input";
-
-	const NEW_USER_ID = "cur_new_user_id";
-
-	const NEW_TYPE_STATE_ID = "cur_new_type_state_id";
-
-	const DELETE_RELATION = "cur_delete_relation";
-
 	/**
 	 * PostMetaBox constructor.
 	 *
@@ -81,7 +71,7 @@ class PostMetaBox {
 				"ContentUserRelations_MetaBox",
 				array(
 					'relations'               => $this->getPostRelationsGroupByUser( $post->ID ),
-					'type_states'             => $tyeStates,
+					'typestates'             => $tyeStates,
 					'POST'                    => array(
 						'user_ids'      => self::POST_USER_IDS,
 						'typestate_ids' => self::POST_RELATION_TYPESTATE_IDS,
@@ -94,10 +84,6 @@ class PostMetaBox {
 					),
 					'ready_to_save_value'     => self::READY_TO_SAVE_VALUE,
 					'app_root_id'             => self::APP_ROOT_ID,
-					'root_id'                 => self::AUTOCOMPLETE_APP_ROOT_ID,
-					'autocomplete_input_name' => self::AUTOCOMPLETE_INPUT_NAME,
-					'name_user_id_arr'        => self::NEW_USER_ID,
-					'name_type_state_id_arr'  => self::NEW_TYPE_STATE_ID,
 				)
 			);
 			add_meta_box(
@@ -143,25 +129,6 @@ class PostMetaBox {
 
 			return;
 		}
-
-		echo '<div id="' . self::AUTOCOMPLETE_APP_ROOT_ID . '">';
-
-		echo "<label class='cur-relation-type-label' for='cur-state-type-select'>Relation: ";
-		echo "<select id='cur-state-type-select'>";
-		foreach ( $relations as $rts ) {
-			$name = $rts->type_name . " - " . $rts->state_name;
-			echo "<option value='{$rts->id}'>$name</option>";
-		}
-		echo "</select>";
-		echo "</label>";
-
-		echo '<label for="' . self::AUTOCOMPLETE_INPUT_NAME . '">User: ';
-		echo '<input type="text" id="' . self::AUTOCOMPLETE_INPUT_NAME . '" name="' . self::AUTOCOMPLETE_INPUT_NAME . '" />';
-		echo '</label>';
-
-		echo '<ul></ul>';
-
-		echo '</div>';
 
 		echo '<div id="' . self::APP_ROOT_ID . '"></div>';
 	}
@@ -214,30 +181,6 @@ class PostMetaBox {
 			} else if ( $action == self::CUR_ACTION_DELETE ) {
 				Database\removeRelationWithTypeState( $user_ids[ $i ], $post_id, $typeState_ids[ $i ] );
 			}
-		}
-
-		// @deprecated section
-
-		if ( ! isset( $_POST[ self::NEW_USER_ID ] ) || ! isset( $_POST[ self::NEW_TYPE_STATE_ID ] ) ) {
-			return;
-		}
-
-		$user_ids      = $_POST[ self::NEW_USER_ID ];
-		$typeState_ids = $_POST[ self::NEW_TYPE_STATE_ID ];
-
-		if ( ! is_array( $user_ids ) || ! is_array( $typeState_ids ) || count( $typeState_ids ) != count( $user_ids ) ) {
-			return;
-		}
-
-		$user_ids      = array_map( function ( $id ) {
-			return intval( $id );
-		}, $user_ids );
-		$typeState_ids = array_map( function ( $id ) {
-			return intval( $id );
-		}, $typeState_ids );
-
-		for ( $i = 0; $i < count( $user_ids ); $i ++ ) {
-			Database\addRelationWithTypeState( $user_ids[ $i ], $post_id, $typeState_ids[ $i ] );
 		}
 
 	}

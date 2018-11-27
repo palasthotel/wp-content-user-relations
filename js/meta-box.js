@@ -3,6 +3,8 @@
 	// ----------------------------
 	// injected vars
 	// ----------------------------
+	const relations = data.relations;
+	const typestates = data.typestates;
 	const POST = data.POST;
 	const ACTION = data.ACTION;
 	const ready_to_save_value = data.ready_to_save_value;
@@ -71,8 +73,10 @@
 	 */
 	function buildRelationsList(relations) {
 		const $ul = $(`<ul></ul>`).addClass('cur-relations_list');
-		for(let i = 0; i < relations.length; i++){
-			buildRelationItem(relations[i]).appendTo($ul);
+		if(typeof relations !== typeof undefined){
+			for(let i = 0; i < relations.length; i++){
+				buildRelationItem(relations[i]).appendTo($ul);
+			}
 		}
 		return $ul;
 	}
@@ -88,7 +92,9 @@
 <tr>
 	<td class="name column-name" data-colname="User">${name}</td>
 	<td class="relations column-relations" data-colname="Relations"></td>
-</tr>`).addClass("cur-user_row");
+</tr>`)
+		.data("user-id", user.ID)
+		.addClass("cur-user_row");
 
 		$row.find(".relations").append(buildRelationsList(user.relations));
 
@@ -100,7 +106,7 @@
 	 * @return {element}
 	 */
 	function buildEmptyRow() {
-		return $(`<tr class="no-items"><td class="colspanchange" colspan="3">Keine Elemente gefunden.</td></tr>`)
+		return $(`<tr class="no-items"><td class="colspanchange" colspan="3">No relations found</td></tr>`)
 	}
 
 	/**
@@ -116,6 +122,34 @@
             </thead>
             <tbody></tbody>
         </table>`);
+	}
+
+	/**
+	 *
+	 * @param typestates
+	 * @return {element}
+	 */
+	function buildRelationTypeSelect(typestates) {
+		const $wrapper = $(`<label class='cur-relation-type-label' for='cur-state-type-select'>Relation: 
+<select id='cur-state-type-select'></select></label>`);
+		const $select = $wrapper.find("select");
+		for(let i = 0; i < typestates.length; i++){
+			const typestate = typestates[i];
+			$("<option></option>")
+				.text(`${typestate.type_name} – ${typestate.state_name}`)
+				.attr("value", typestate.id)
+				.data("typestate", typestate)
+				.appendTo($select);
+		}
+		return $wrapper;
+	}
+
+	/**
+	 *
+	 * @return {element}
+	 */
+	function buildAutocompleteControl(){
+		return $(`<label for="cur-autocomplete">User: <input type="text" id="cur-autocomplete" name="cur_user_autocomplete" /></label>`)
 	}
 
 	// ----------------------------
@@ -145,97 +179,106 @@
 
 	});
 
+	$app.on("content_user_relations_add_relation", function(e, user, relation){
+		console.log(user, relation);
+		let $user_row = $table.find(`[data-user-id=${user.ID}]`);
+		if($user_row.length < 1){
+			// TODO: create one
+			user.relations = [relation];
+			$user_row = buildRow(user);
+		} else if($user_row.length > 1){
+			console.error("Too many rows for user");
+		}
+
+		console.log($user_row);
+		$emptyRow.remove();
+		$tbody.append($user_row);
+
+	});
+
+	function initAutocomplete($autocomplete, $stateTypeSelect) {
+
+		if(!$autocomplete.is("input")) $autocomplete = $autocomplete.find("input").first();
+
+		$autocomplete.autocomplete({
+			source: function(request, response) {
+				api.findRelatableUsers(request.term, function(data) {
+					response(data.users);
+				});
+			},
+			select: function(event, ui) {
+				addUserRelation(ui.item, getTypeStateItem());
+				return false;
+			},
+			delay: 500,
+			minLength: 3,
+		});
+
+		$autocomplete.autocomplete('instance')._renderItem = function(ul, item) {
+			return buildAutocompleteItem(item).appendTo(ul);
+		};
+
+		// get typestate relation information out of select
+		function getTypeStateItem() {
+			return $stateTypeSelect.children(':selected').data("typestate")
+		}
+
+		// add relation to new relations list
+		function addUserRelation(user, typeStateItem) {
+			$app.trigger("content_user_relations_add_relation", [ user, typeStateItem]);
+		}
+
+		function buildAutocompleteItem(user) {
+			const $li = $('<li></li>').addClass('cur-autocomplete-user-item');
+			$li.append(
+				$('<div></div>').
+					text(user.display_name).
+					addClass('user-item__user-name'),
+			);
+			// $li.append(
+			// 	$("<div></div>")
+			// 	.text(item.user_email)
+			// 	.addClass("user-item__user-email")
+			// );
+			$li.append(
+				$('<div></div>').text('ID: ' + user.ID).addClass('user-item__ID'),
+			);
+			$li.data('item.data', user);
+			return $li;
+		}
+
+	}
+
 	// ----------------------------
 	// init application
 	// ----------------------------
 	const $table = buildTable();
 	$app.append($table);
 	const $tbody = $table.find("tbody");
-	for( let i = 0; i < data.relations.length; i++){
-		buildRow(data.relations[i]).appendTo($tbody);
+	const $emptyRow = buildEmptyRow();
+	for( let i = 0; i < relations.length; i++){
+		buildRow(relations[i]).appendTo($tbody);
+	}
+	if($tbody.html() === ""){
+		$tbody.append($emptyRow);
 	}
 
 	// only save values if javascript has successfully saved state
 	$app.append(buildHiddenField(POST.ready_to_save, ready_to_save_value));
 
+	const $typestateselectwrapper = buildRelationTypeSelect(typestates);
+	$app.append($typestateselectwrapper);
+
+	const $autocomplete_wrapper = buildAutocompleteControl();
+	$app.append($autocomplete_wrapper);
+	initAutocomplete($autocomplete_wrapper, $typestateselectwrapper.find("select"));
+
 
 	// ----------------------------
 	// @deprecated section
 	// ----------------------------
-	const $root = $('#' + data.root_id);
-	const $stateTypeSelect = $root.find('select');
-	const $autocomplete = $root.find(
-		'input[name=' + data.autocomplete_input_name + ']');
-	const $list = $root.find('ul');
 
-	const new_user_id_name = data.name_user_id_arr;
-	const new_type_state_id_name = data.name_type_state_id_arr;
 
-	$autocomplete.autocomplete({
-		source: function(request, response) {
-			api.findRelatableUsers(request.term, function(data) {
-				response(data.users);
-			});
-		},
-		select: function(event, ui) {
-			addUserRelation(ui.item, getTypeStateItem());
-			return false;
-		},
-		delay: 500,
-		minLength: 3,
-	});
 
-	$autocomplete.autocomplete('instance')._renderItem = function(ul, item) {
-		return buildAutocompleteItem(item).appendTo(ul);
-	};
-
-	// get typestate relation information out of select
-	function getTypeStateItem() {
-		console.log($stateTypeSelect.children(':selected'));
-		return {
-			id: $stateTypeSelect.val(),
-			name: $stateTypeSelect.children(':selected').text(),
-		};
-	}
-
-	// add relation to new relations list
-	function addUserRelation(user, typeStateItem) {
-		console.log(user, typeStateItem);
-		$list.append(
-			$('<li></li>').append(
-				$('<div></div>').
-					text(user.display_name + ' → ' + typeStateItem.name),
-			).append(
-				$('<input/>').
-					attr('name', new_type_state_id_name + '[]').
-					attr('type', 'hidden').
-					val(typeStateItem.id),
-			).append(
-				$('<input/>').
-					attr('type', 'hidden').
-					attr('name', new_user_id_name + '[]').
-					val(user.ID),
-			),
-		);
-	}
-
-	function buildAutocompleteItem(user) {
-		const $li = $('<li></li>').addClass('cur-autocomplete-user-item');
-		$li.append(
-			$('<div></div>').
-				text(user.display_name).
-				addClass('user-item__user-name'),
-		);
-		// $li.append(
-		// 	$("<div></div>")
-		// 	.text(item.user_email)
-		// 	.addClass("user-item__user-email")
-		// );
-		$li.append(
-			$('<div></div>').text('ID: ' + user.ID).addClass('user-item__ID'),
-		);
-		$li.data('item.data', user);
-		return $li;
-	}
 
 })(jQuery, ContentUserRelations_API, ContentUserRelations_MetaBox);
