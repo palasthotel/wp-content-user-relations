@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Content User Relations\n"
-"POT-Creation-Date: 2018-11-27 19:47+0100\n"
-"PO-Revision-Date: 2018-11-27 19:50+0100\n"
+"POT-Creation-Date: 2018-11-28 15:01+0100\n"
+"PO-Revision-Date: 2018-11-28 15:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: inc/post-meta-box.php:74 inc/post-meta-box.php:78
+#: inc/post-meta-box.php:74 inc/post-meta-box.php:79
 msgid "User"
 msgstr "Nutzer"
 
@@ -33,18 +33,22 @@ msgid "No relations found"
 msgstr "Keine Relationen gefunden"
 
 #: inc/post-meta-box.php:77
+msgid "Add user"
+msgstr "Benutzer hinzufügen"
+
+#: inc/post-meta-box.php:78
 msgid "Relation"
 msgstr "Relation"
 
-#: inc/post-meta-box.php:79
+#: inc/post-meta-box.php:80
 msgid "Remove"
 msgstr "Entfernen"
 
-#: inc/post-meta-box.php:80
+#: inc/post-meta-box.php:81
 msgid "Don't remove"
 msgstr "Doch nicht"
 
-#: inc/post-meta-box.php:103
+#: inc/post-meta-box.php:104
 msgid "Content user relations"
 msgstr "Inhalt-Benutzer Beziehungen"
 

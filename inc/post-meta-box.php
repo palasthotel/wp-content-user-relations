@@ -74,6 +74,7 @@ class PostMetaBox {
 						'col_title_user' => __('User', Plugin::DOMAIN),
 						'col_title_relations' => __('Relations', Plugin::DOMAIN),
 						'no_relations_found' => __('No relations found', Plugin::DOMAIN),
+						'label_add_user_control' => __('Add user', Plugin::DOMAIN),
 						'label_typestate_select' => __('Relation', Plugin::DOMAIN),
 						'label_autocomplete_users' => __('User', Plugin::DOMAIN),
 						'remove' => __('Remove', Plugin::DOMAIN),

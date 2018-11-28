@@ -23,14 +23,22 @@
 	}
 	.cur-relations__item{
 		margin: 0;
-		padding: 4px 0;
+		padding: 6px 0;
+
 		.remove{
+			opacity: 0;
 			margin-left: 10px;
 			color: #a00;
 			cursor: pointer;
 			text-decoration: underline;
 			&:hover{
 				text-decoration: none;
+			}
+		}
+
+		&:hover{
+			.remove{
+				opacity: 1;
 			}
 		}
 
@@ -49,6 +57,10 @@
 		}
 	}
 
+	.cur-controls__label{
+		font-size: 14px;
+		margin-bottom: 0;
+	}
 	.cur-controls{
 		padding: 10px 0 0 0;
 		display: flex;

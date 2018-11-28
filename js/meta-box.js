@@ -367,6 +367,7 @@
 
 	checkEmptyTable();
 	const $controls = buildControls(typestates);
+	$app.append($("<h3></h3>").text(i18n.label_add_user_control).addClass('cur-controls__label'))
 	$app.append($controls);
 
 	initAutocomplete($controls);

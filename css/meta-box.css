@@ -8,17 +8,21 @@
 
 #cur-app .cur-relations__item + .cur-relations__item { border-top: 1px solid #eee; }
 
-#cur-app .cur-relations__item { margin: 0; padding: 4px 0; }
+#cur-app .cur-relations__item { margin: 0; padding: 6px 0; }
 
-#cur-app .cur-relations__item .remove { margin-left: 10px; color: #a00; cursor: pointer; text-decoration: underline; }
+#cur-app .cur-relations__item .remove { opacity: 0; margin-left: 10px; color: #a00; cursor: pointer; text-decoration: underline; }
 
 #cur-app .cur-relations__item .remove:hover { text-decoration: none; }
+
+#cur-app .cur-relations__item:hover .remove { opacity: 1; }
 
 #cur-app .cur-relations__item.will-be-removed .remove { color: #0073aa; }
 
 #cur-app .cur-relations__item.will-be-removed .name { text-decoration: line-through; }
 
 #cur-app .cur-relations__item.will-be-added .name { color: green; }
+
+#cur-app .cur-controls__label { font-size: 14px; margin-bottom: 0; }
 
 #cur-app .cur-controls { padding: 10px 0 0 0; display: -webkit-box; display: -webkit-flex; display: -ms-flexbox; display: flex; }
 
