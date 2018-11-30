@@ -127,7 +127,7 @@ class PostMetaBox {
 
 		}
 
-		return $user_relations;
+		return 	apply_filters(Plugin::FILTER_POST_META_BOX_USER_RELATIONS, $user_relations);
 	}
 
 	/**
