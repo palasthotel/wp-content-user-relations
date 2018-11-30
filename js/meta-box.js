@@ -1,13 +1,22 @@
 (function($, api, data, builder) {
 
+	const HOOKS = {
+		RELATION_TYPESTATE_SELECTION_CHANGE: "relation_typestate_selection_change",
+		USER_RELATION_ADD: "user_relation_add",
+		USER_RELATION_REMOVE: "user_relation_remove",
+	};
+
 	// --------------------------------------------------------
 	// quick look for existing object functions
 	// --------------------------------------------------------
-	const functionExists = (name, obj) =>{
-		if(typeof obj === typeof undefined) return typeof builder[name] === "function";
-		return typeof obj[name] === "function";
+	const functionExists = (name, obj) => {
+		if (typeof obj === typeof undefined) {
+			return typeof builder[name] ===
+				'function';
+		}
+		return typeof obj[name] === 'function';
 	};
-	const functionNotExists = (name, obj) =>{
+	const functionNotExists = (name, obj) => {
 		return !functionExists(name, obj);
 	};
 
@@ -26,9 +35,27 @@
 	// enrich builder with data
 	// ----------------------------
 	const data_keys = Object.keys(data);
-	for(let i = 0; i < data_keys.length; i++){
+	for (let i = 0; i < data_keys.length; i++) {
 		builder[data_keys[i]] = data[data_keys[i]];
 	}
+
+	// ----------------------------
+	// hook system
+	// ----------------------------
+	if (typeof builder._hooks === typeof undefined) {
+		builder._hooks = {};
+	}
+
+	builder.fireHook = function(name, value) {
+		if (typeof builder._hooks[name] === typeof []) {
+			for (let i = 0; i < builder._hooks[name].length; i++) {
+				if (typeof builder._hooks[name][i] === 'function') {
+					value = builder._hooks[name][i](value);
+				}
+			}
+		}
+		return value;
+	};
 
 	// ----------------------------
 	// relations table builder
@@ -40,15 +67,14 @@
 	 * @param value
 	 * @return {element}
 	 */
-	if(functionNotExists("buildHiddenField")){
+	if (functionNotExists('buildHiddenField')) {
 		builder.buildHiddenField = function(name, value) {
 			return $('<input />').
 				val(value).
 				attr('name', name).
 				attr('type', 'hidden');
-		}
+		};
 	}
-
 
 	/**
 	 * build hidden fields for post_save action
@@ -56,34 +82,33 @@
 	 * @param action
 	 * @return [element]
 	 */
-	if(functionNotExists("buildHiddenFields")){
+	if (functionNotExists('buildHiddenFields')) {
 		builder.buildHiddenFields = function(relation, action = '') {
 			return [
 				this.buildHiddenField(`${POST.user_ids}[]`, relation.user_id),
-				this.buildHiddenField(`${POST.typestate_ids}[]`, relation.typestate_id),
+				this.buildHiddenField(`${POST.typestate_ids}[]`,
+					relation.typestate_id),
 				this.buildHiddenField(`${POST.actions}[]`, ''),
 			];
-		}
+		};
 	}
-
 
 	/**
 	 * build a remove button
 	 * @return {element}
 	 */
-	if(functionNotExists("buildRemove")){
+	if (functionNotExists('buildRemove')) {
 		builder.buildRemove = function() {
 			return $('<a></a>').text(i18n.remove).addClass('remove');
-		}
+		};
 	}
-
 
 	/**
 	 * build user relation item row
 	 * @param relation
 	 * @return {element}
 	 */
-	if(functionNotExists("buildRelationItem")){
+	if (functionNotExists('buildRelationItem')) {
 		builder.buildRelationItem = function(relation) {
 			return $('<li></li>').
 				addClass('cur-relations__item').
@@ -91,20 +116,19 @@
 				append(
 					$('<span></span>').
 						text(relation.type_name + ' – ' + relation.state_name).
-						addClass('name')
+						addClass('name'),
 				).
 				append(this.buildRemove()).
 				append(this.buildHiddenFields(relation));
-		}
+		};
 	}
-
 
 	/**
 	 * build user relations list
 	 * @param relations
 	 * @return {element}
 	 */
-	if(functionNotExists("buildRelationsList")){
+	if (functionNotExists('buildRelationsList')) {
 		builder.buildRelationsList = function(relations) {
 			const $ul = $(`<ul></ul>`).addClass('cur-relations_list');
 			if (typeof relations !== typeof undefined) {
@@ -113,7 +137,7 @@
 				}
 			}
 			return $ul;
-		}
+		};
 
 	}
 
@@ -122,41 +146,41 @@
 	 * @param user
 	 * @return {element}
 	 */
-	if(functionNotExists("buildRow")){
+	if (functionNotExists('buildRow')) {
 		builder.buildRow = function(user) {
 			const name = user.display_name;
 			const $row = $(`
 <tr>
 	<td class="name column-name">
-		<a href="${builder.getUserProfileLink(user.user_id)}" target="_blank">${name}</a>
+		<a href="${builder.getUserProfileLink(
+				user.user_id)}" target="_blank">${name}</a>
 	</td>
 	<td class="relations column-relations"></td>
 </tr>`).attr('id', 'cur-user-row-' + user.user_id).addClass('cur-user_row');
 
-			$row.find('.relations').append(this.buildRelationsList(user.relations));
+			$row.find('.relations').
+				append(this.buildRelationsList(user.relations));
 
 			return $row;
-		}
+		};
 	}
-
 
 	/**
 	 * build row for empty table visualization
 	 * @return {element}
 	 */
-	if(functionNotExists("buildEmptyRow")){
+	if (functionNotExists('buildEmptyRow')) {
 		builder.buildEmptyRow = function() {
 			return $(
 				`<tr class="no-items"><td class="colspanchange" colspan="3">${i18n.no_relations_found}</td></tr>`);
-		}
+		};
 	}
-
 
 	/**
 	 * build the main table for relations
 	 * @return {element}
 	 */
-	if(functionNotExists("buildTable")){
+	if (functionNotExists('buildTable')) {
 		builder.buildTable = function() {
 			return $(`<table class="wp-list-table widefat fixed striped relatedmembers">
             <thead>
@@ -166,16 +190,15 @@
             </thead>
             <tbody></tbody>
         </table>`);
-		}
+		};
 	}
-
 
 	/**
 	 *
 	 * @param typestates
 	 * @return {element}
 	 */
-	if(functionNotExists("buildRelationTypeSelect")){
+	if (functionNotExists('buildRelationTypeSelect')) {
 		builder.buildRelationTypeSelect = function(typestates) {
 			const $wrapper = $(
 				`<label class='cur-relation-type-label' for='cur-state-type-select'>${i18n.label_typestate_select}: 
@@ -190,38 +213,37 @@
 					appendTo($select);
 			}
 			return $wrapper;
-		}
+		};
 	}
-
 
 	/**
 	 *
 	 * @return {element}
 	 */
-	if(functionNotExists("buildAutocompleteControl")){
+	if (functionNotExists('buildAutocompleteControl')) {
 		builder.buildAutocompleteControl = function() {
 			return $(`
 <label for="cur-autocomplete">${i18n.label_autocomplete_users}: 
 <input type="text" id="cur-autocomplete" name="cur_user_autocomplete" />
 </label>`);
-		}
+		};
 	}
-
 
 	/**
 	 * @param typestates
 	 * @return {element}
 	 */
-	if(functionNotExists("buildControls")){
+	if (functionNotExists('buildControls')) {
 		builder.buildControls = function(typestates) {
 			return $('<div></div>').
 				addClass('cur-controls').
-				append(this.buildRelationTypeSelect(typestates).addClass("cur-control")).
-				append(this.buildAutocompleteControl().addClass("cur-control"));
-		}
+				append(this.buildRelationTypeSelect(typestates).
+					addClass('cur-control')).
+				append(this.buildAutocompleteControl().addClass('cur-control'));
+		};
 	}
 
-	if(functionNotExists('buildAutocompleteUserItem')){
+	if (functionNotExists('buildAutocompleteUserItem')) {
 		builder.buildAutocompleteUserItem = function(user) {
 			const $li = $('<li></li>').addClass('cur-autocomplete-user-item');
 			$li.append(
@@ -230,9 +252,9 @@
 					addClass('user-item__user-name'),
 			);
 			$li.append(
-				$("<div></div>")
-				.text('EMail: '+user.user_email)
-				.addClass("user-item__user-email")
+				$('<div></div>').
+					text('EMail: ' + user.user_email).
+					addClass('user-item__user-email'),
 			);
 			$li.append(
 				$('<div></div>').
@@ -241,60 +263,61 @@
 			);
 			$li.data('item.data', user);
 			return $li;
-		}
+		};
 	}
-
 
 	// ----------------------------
 	// pure functions
 	// ----------------------------
-	if(functionNotExists("findActionInput")){
+	if (functionNotExists('findActionInput')) {
 		builder.findActionInput = function($element) {
 			return $element.find(`input[name^="${POST.actions}"]`);
-		}
+		};
 	}
 
-	if(functionNotExists("findRelations")){
+	if (functionNotExists('findRelations')) {
 		builder.findRelations = function findRelations($element) {
 			return $element.find('.cur-relations_list');
-		}
+		};
 	}
 
-	if(functionNotExists("findRelationsByTypestateId")){
+	if (functionNotExists('findRelationsByTypestateId')) {
 		builder.findRelationsByTypestateId = function($element, typestate_id) {
 			return $element.find(`[data-typestate-id=${typestate_id}]`);
-		}
+		};
 	}
 
-	if(functionNotExists("findUserRow")){
+	if (functionNotExists('findUserRow')) {
 		builder.findUserRow = function(user_id) {
 			return this.elements.$tbody.find(`#cur-user-row-${user_id}`);
-		}
+		};
 	}
 
-	if(functionNotExists("getUserProfileLink")){
-		builder.getUserProfileLink = function(user_id){
+	if (functionNotExists('getUserProfileLink')) {
+		builder.getUserProfileLink = function(user_id) {
 			return links.user_profile.replace('%uid%', user_id);
-		}
+		};
 	}
 
-	if(functionNotExists('')){
+	if (functionNotExists('')) {
 		builder.getSelectedTypeState = function($controls) {
-			return $controls.find("select").children(':selected').data('typestate');
-		}
+			return $controls.find('select').
+				children(':selected').
+				data('typestate');
+		};
 	}
 
 	// ----------------------------
 	// event handlers
 	// ----------------------------
 
-	if(typeof builder.events === typeof undefined){
+	if (typeof builder.events === typeof undefined) {
 		builder.events = {};
 	}
 	const events = builder.events;
 
-	if(functionNotExists('on_remove', events)){
-		events.on_remove = function(e){
+	if (functionNotExists('on_remove', events)) {
+		events.on_remove = function(e) {
 			e.preventDefault();
 			const $btn = $(this);
 			const $relation_row = $btn.closest('li');
@@ -326,20 +349,20 @@
 
 			builder.update_parent_modification_state($relation_row);
 
-		}
+		};
 	}
 
-	if(functionNotExists("addUserRelation", events)){
+	if (functionNotExists('addUserRelation', events)) {
 		events.addUserRelation = function(user, typeStateItem) {
 			builder.elements.$app.trigger(
 				'content_user_relations_add_relation',
-				[user, typeStateItem]
+				[user, typeStateItem],
 			);
-		}
+		};
 	}
 
-	if(functionNotExists('on_add_user_relation', events)){
-		events.on_add_user_relation = function(e, user, relation){
+	if (functionNotExists('on_add_user_relation', events)) {
+		events.on_add_user_relation = function(e, user, relation) {
 			let $user_row = builder.findUserRow(user.ID);
 			relation.typestate_id = relation.id;
 			relation.user_id = user.ID;
@@ -364,37 +387,39 @@
 
 			const $item = builder.findRelationsByTypestateId(
 				$user_row,
-				relation.typestate_id
+				relation.typestate_id,
 			);
 			if ($item.length > 0) {
 				alert('Relation already exists');
 				return;
 			}
 			const $relations_list = builder.findRelations($user_row);
-			const $relation = builder.buildRelationItem(relation).addClass('will-be-added');
+			const $relation = builder.buildRelationItem(relation).
+				addClass('will-be-added');
 			builder.findActionInput($relation).val(ACTION.add);
 			$relations_list.append($relation);
 
 			builder.update_parent_modification_state($relations_list);
 
-		}
+		};
 	}
 
-	if(functionNotExists("update_parent_modification_state")){
+	if (functionNotExists('update_parent_modification_state')) {
 		builder.update_parent_modification_state = function($childElement) {
 			// user row visualization
 			const $user_row = $childElement.closest('tr');
-			if ($user_row.find('.cur-relations__item.will-be-removed').length ===
+			if ($user_row.find(
+				'.cur-relations__item.will-be-removed').length ===
 				$user_row.find('.cur-relations__item').length) {
 				$user_row.addClass('will-be-removed');
 			}
 			else {
 				$user_row.removeClass('will-be-removed');
 			}
-		}
+		};
 	}
 
-	if(functionNotExists("initAutocomplete", events)){
+	if (functionNotExists('initAutocomplete', events)) {
 		events.initAutocomplete = function($controls) {
 			const $autocomplete = $controls.find('input').first();
 			const cache = {};
@@ -413,7 +438,7 @@
 				select: function(event, ui) {
 					builder.events.addUserRelation(
 						ui.item,
-						builder.getSelectedTypeState($controls)
+						builder.getSelectedTypeState($controls),
 					);
 					return false;
 				},
@@ -422,7 +447,8 @@
 			});
 
 			$autocomplete.on('click', function() {
-				$autocomplete.autocomplete('instance').search($autocomplete.val());
+				$autocomplete.autocomplete('instance').
+					search($autocomplete.val());
 			});
 
 			$autocomplete.autocomplete('instance')._renderItem = function(
@@ -430,31 +456,31 @@
 				return builder.buildAutocompleteUserItem(item).appendTo(ul);
 			};
 
-		}
+		};
 	}
 
-
-	if(functionNotExists("checkEmptyTable")){
+	if (functionNotExists('checkEmptyTable')) {
 		builder.checkEmptyTable = function() {
 			if (this.elements.$tbody.html() === '') {
 				this.elements.$tbody.append(this.elements.$emptyRow);
 			}
-		}
+		};
 	}
-
 
 	// ----------------------------
 	// init application
 	// ----------------------------
 
-	if(functionNotExists("init")){
-		builder.init = function(){
+	if (functionNotExists('init')) {
+		builder.init = function() {
 
 			this.elements = {};
 			this.elements.$app = $(`#${this.app_root_id}`);
 
-			this.elements.$app.on('click', 'a.remove', builder.events.on_remove);
-			this.elements.$app.on('content_user_relations_add_relation', builder.events.on_add_user_relation );
+			this.elements.$app.on('click', 'a.remove',
+				builder.events.on_remove);
+			this.elements.$app.on('content_user_relations_add_relation',
+				builder.events.on_add_user_relation);
 
 			this.elements.$table = builder.buildTable();
 			this.elements.$app.append(this.elements.$table);
@@ -466,18 +492,32 @@
 			}
 
 			builder.checkEmptyTable();
-			const $controls = builder.buildControls(typestates);
-			this.elements.$app.append($("<h3></h3>").text(i18n.label_add_user_control).addClass('cur-controls__label'))
-			this.elements.$app.append($controls);
+			this.elements.$controls = builder.buildControls(typestates);
+			this.elements.$app.append($('<h3></h3>').
+				text(i18n.label_add_user_control).
+				addClass('cur-controls__label'));
+			this.elements.$app.append(this.elements.$controls);
 
-			this.events.initAutocomplete($controls);
+			this.events.initAutocomplete(this.elements.$controls);
 
 			// only save values if javascript has successfully saved state
-			this.elements.$app.append(builder.buildHiddenField(POST.ready_to_save, ready_to_save_value));
-		}
+			this.elements.$app.append(
+				builder.buildHiddenField(POST.ready_to_save,
+					ready_to_save_value));
+
+			if (typeof this.events.on_ready === typeof []) {
+				for (let i = 0; i < this.events.on_ready.length; i++) {
+					if (typeof this.events.on_ready[i] ===
+						typeof 'function') {
+						this.events.on_ready[i]();
+					}
+				}
+			}
+		};
 	}
 
 	// lets get it started
 	builder.init();
 
-})(jQuery, ContentUserRelations_API, ContentUserRelations_MetaBox, window.ContentUserRelations_MetaBox_Builder || {});
+})(jQuery, ContentUserRelations_API, ContentUserRelations_MetaBox,
+	window.ContentUserRelations_MetaBox_Builder || {});
