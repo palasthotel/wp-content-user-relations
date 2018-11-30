@@ -221,6 +221,29 @@
 		}
 	}
 
+	if(functionNotExists('buildAutocompleteUserItem')){
+		builder.buildAutocompleteUserItem = function(user) {
+			const $li = $('<li></li>').addClass('cur-autocomplete-user-item');
+			$li.append(
+				$('<div></div>').
+					text(user.display_name).
+					addClass('user-item__user-name'),
+			);
+			$li.append(
+				$("<div></div>")
+				.text('EMail: '+user.user_email)
+				.addClass("user-item__user-email")
+			);
+			$li.append(
+				$('<div></div>').
+					text('ID: ' + user.ID).
+					addClass('user-item__ID'),
+			);
+			$li.data('item.data', user);
+			return $li;
+		}
+	}
+
 
 	// ----------------------------
 	// pure functions
@@ -252,6 +275,12 @@
 	if(functionNotExists("getUserProfileLink")){
 		builder.getUserProfileLink = function(user_id){
 			return links.user_profile.replace('%uid%', user_id);
+		}
+	}
+
+	if(functionNotExists('')){
+		builder.getSelectedTypeState = function($controls) {
+			return $controls.find("select").children(':selected').data('typestate');
 		}
 	}
 
@@ -367,7 +396,6 @@
 
 	if(functionNotExists("initAutocomplete", events)){
 		events.initAutocomplete = function($controls) {
-			const $stateTypeSelect = $controls.find('select');
 			const $autocomplete = $controls.find('input').first();
 			const cache = {};
 			$autocomplete.autocomplete({
@@ -383,7 +411,10 @@
 					});
 				},
 				select: function(event, ui) {
-					builder.events.addUserRelation(ui.item, getTypeStateItem())
+					builder.events.addUserRelation(
+						ui.item,
+						builder.getSelectedTypeState($controls)
+					);
 					return false;
 				},
 				delay: 500,
@@ -396,34 +427,8 @@
 
 			$autocomplete.autocomplete('instance')._renderItem = function(
 				ul, item) {
-				return buildAutocompleteItem(item).appendTo(ul);
+				return builder.buildAutocompleteUserItem(item).appendTo(ul);
 			};
-
-			// get typestate relation information out of select
-			function getTypeStateItem() {
-				return $stateTypeSelect.children(':selected').data('typestate');
-			}
-
-			function buildAutocompleteItem(user) {
-				const $li = $('<li></li>').addClass('cur-autocomplete-user-item');
-				$li.append(
-					$('<div></div>').
-						text(user.display_name).
-						addClass('user-item__user-name'),
-				);
-				$li.append(
-					$("<div></div>")
-					.text('EMail: '+user.user_email)
-					.addClass("user-item__user-email")
-				);
-				$li.append(
-					$('<div></div>').
-						text('ID: ' + user.ID).
-						addClass('user-item__ID'),
-				);
-				$li.data('item.data', user);
-				return $li;
-			}
 
 		}
 	}

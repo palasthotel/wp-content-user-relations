@@ -111,7 +111,6 @@ class Ajax {
 					"ID"           => $user->ID,
 					"display_name" => $user->display_name,
 					"user_email"   => $user->user_email,
-					"html"         => "",
 				)
 			);
 
