@@ -24,7 +24,9 @@ class Plugin {
 
 	const HANDLE_API_JS = "content-user-relations-js-api";
 	const HANDLE_USER_PROFILE_JS = "content-user-relations-js-user-profile";
+	const HANDLE_POST_META_BOX_STYLE = "content-user-relations-style";
 	const HANDLE_POST_META_BOX_JS = "content-user-relations-js-meta-box";
+	const HANDLE_POST_META_BOX_JS_EXTENSION = "content-user-relations-js-meta-box-ext-%d";
 
 	/**
 	 * filters
@@ -35,6 +37,15 @@ class Plugin {
 	const FILTER_AJAX_WP_USERS_QUERY_ARGS = "content_user_relations_ajax_wp_users_query_args";
 	const FILTER_AJAX_USER = "content_user_relations_ajax_user";
 	const FILTER_AJAX_USERS_RESPONSE = "content_user_relations_ajax_users";
+	const FILTER_META_BOX_EXTENSION_SCRIPS = "content_user_relations_meta_box_extension_scripts";
+
+	/**
+	 * actions
+	 */
+	const ACTION_ADD_CONTENT_USER_RELATION_BEFORE = "content_user_relations_add_relation_before";
+	const ACTION_ADD_CONTENT_USER_RELATION_AFTER = "content_user_relations_add_relation_after";
+	const ACTION_REMOVE_CONTENT_USER_RELATION_BEFORE = "content_user_relations_remove_relation_before";
+	const ACTION_REMOVE_CONTENT_USER_RELATION_AFTER = "content_user_relations_remove_relation_after";
 
 	/**
 	 * @var Plugin|null

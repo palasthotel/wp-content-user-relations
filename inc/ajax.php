@@ -9,6 +9,8 @@
 namespace ContentUserRelations;
 
 
+use function ContentUserRelations\Database\getPostRelations;
+
 class Ajax {
 
 	const ACTION_FIND_CONTENTS = "cur_find_contents";
@@ -46,6 +48,7 @@ class Ajax {
 					"findContents" => $ajax_url . self::ACTION_FIND_CONTENTS,
 					"findUsers"    => $ajax_url . self::ACTION_FIND_USERS,
 				),
+
 			)
 		);
 	}
@@ -90,13 +93,17 @@ class Ajax {
 		$this->securityCheck();
 
 		$search = sanitize_text_field( $_GET["s"] );
+		$post_id = intval($_GET["post_id"]);
+
 		$users  = new \WP_User_Query(
 			apply_filters(
 				Plugin::FILTER_AJAX_WP_USERS_QUERY_ARGS,
 				array(
 					"search" => "*$search*",
-					"number" => 10,
-				)
+					"number" => 10
+				),
+				$search,
+				$post_id
 			)
 		);
 
@@ -111,7 +118,9 @@ class Ajax {
 					"ID"           => $user->ID,
 					"display_name" => $user->display_name,
 					"user_email"   => $user->user_email,
-				)
+				),
+				$search,
+				$post_id
 			);
 
 		}

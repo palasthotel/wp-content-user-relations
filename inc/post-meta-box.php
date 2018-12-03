@@ -9,7 +9,6 @@
 namespace ContentUserRelations;
 
 
-use function ContentUserRelations\Database\getRelationsList;
 use function ContentUserRelations\Database\getRelationTypeStatesList;
 
 class PostMetaBox {
@@ -42,17 +41,31 @@ class PostMetaBox {
 		add_action( 'save_post', array( $this, 'save_post' ) );
 	}
 
+	function getExtensionScriptHandle( $number ) {
+		return sprintf( Plugin::HANDLE_POST_META_BOX_JS_EXTENSION, $number );
+	}
+
 	/**
 	 * register meta box
 	 */
 	function add_meta_box( $post_type, $post ) {
 		if ( $this->plugin->settings->isPostTypeEnabled( $post_type ) ) {
 			wp_enqueue_style(
-				"content-user-relations-style",
+				Plugin::HANDLE_POST_META_BOX_STYLE,
 				$this->plugin->url . "/css/meta-box.css"
 			);
 			wp_enqueue_script( 'jquery-ui-autocomplete' );
 			wp_enqueue_script( Plugin::HANDLE_API_JS );
+			$mods = apply_filters( Plugin::FILTER_META_BOX_EXTENSION_SCRIPS, array() );
+			foreach ( $mods as $number => $script_url ) {
+				wp_enqueue_script(
+					$this->getExtensionScriptHandle( $number ),
+					$script_url,
+					array( "jquery", Plugin::HANDLE_API_JS ),
+					1,
+					true
+				);
+			}
 			wp_enqueue_script(
 				Plugin::HANDLE_POST_META_BOX_JS,
 				$this->plugin->url . "/js/meta-box.js",
@@ -70,33 +83,34 @@ class PostMetaBox {
 			wp_localize_script( Plugin::HANDLE_POST_META_BOX_JS,
 				"ContentUserRelations_MetaBox",
 				array(
-					'i18n' => array(
-						'col_title_user' => __('User', Plugin::DOMAIN),
-						'col_title_relations' => __('Relations', Plugin::DOMAIN),
-						'no_relations_found' => __('No relations found', Plugin::DOMAIN),
-						'label_add_user_control' => __('Add user', Plugin::DOMAIN),
-						'label_typestate_select' => __('Relation', Plugin::DOMAIN),
-						'label_autocomplete_users' => __('User', Plugin::DOMAIN),
-						'remove' => __('Remove', Plugin::DOMAIN),
-						'unremove' => __('Don\'t remove', Plugin::DOMAIN),
+					'i18n'                => array(
+						'col_title_user'           => __( 'User', Plugin::DOMAIN ),
+						'col_title_relations'      => __( 'Relations', Plugin::DOMAIN ),
+						'no_relations_found'       => __( 'No relations found', Plugin::DOMAIN ),
+						'label_add_user_control'   => __( 'Add user', Plugin::DOMAIN ),
+						'label_typestate_select'   => __( 'Relation', Plugin::DOMAIN ),
+						'label_autocomplete_users' => __( 'User', Plugin::DOMAIN ),
+						'remove'                   => __( 'Remove', Plugin::DOMAIN ),
+						'unremove'                 => __( 'Don\'t remove', Plugin::DOMAIN ),
 					),
-					'relations'               => $this->getPostRelationsGroupByUser( $post->ID ),
-					'typestates'             => $tyeStates,
-					'POST'                    => array(
+					'post_id'             => get_the_ID(),
+					'relations'           => $this->getPostRelationsGroupByUser( $post->ID ),
+					'typestates'          => $tyeStates,
+					'POST'                => array(
 						'user_ids'      => self::POST_USER_IDS,
 						'typestate_ids' => self::POST_RELATION_TYPESTATE_IDS,
 						'ready_to_save' => self::POST_READY_TO_SAVE,
 						'actions'       => self::POST_ACTIONS,
 					),
-					'ACTION'                  => array(
+					'ACTION'              => array(
 						'remove' => self::CUR_ACTION_REMOVE,
 						'add'    => self::CUR_ACTION_ADD,
 					),
-					'links' => array(
+					'links'               => array(
 						'user_profile' => add_query_arg( 'user_id', '%uid%', self_admin_url( 'user-edit.php' ) ),
 					),
-					'ready_to_save_value'     => self::READY_TO_SAVE_VALUE,
-					'app_root_id'             => self::APP_ROOT_ID,
+					'ready_to_save_value' => self::READY_TO_SAVE_VALUE,
+					'app_root_id'         => self::APP_ROOT_ID,
 				)
 			);
 			add_meta_box(
@@ -127,7 +141,7 @@ class PostMetaBox {
 
 		}
 
-		return 	apply_filters(Plugin::FILTER_POST_META_BOX_USER_RELATIONS, $user_relations);
+		return apply_filters( Plugin::FILTER_POST_META_BOX_USER_RELATIONS, $user_relations );
 	}
 
 	/**
@@ -190,9 +204,13 @@ class PostMetaBox {
 		for ( $i = 0; $i < count( $actions ); $i ++ ) {
 			$action = $actions[ $i ];
 			if ( $action == self::CUR_ACTION_ADD ) {
+				do_action(Plugin::ACTION_ADD_CONTENT_USER_RELATION_BEFORE, $user_ids[$i], $post_id, $typeState_ids[$i]);
 				Database\addRelationWithTypeState( $user_ids[ $i ], $post_id, $typeState_ids[ $i ] );
+				do_action(Plugin::ACTION_ADD_CONTENT_USER_RELATION_AFTER, $user_ids[$i], $post_id, $typeState_ids[$i]);
 			} else if ( $action == self::CUR_ACTION_REMOVE ) {
+				do_action(Plugin::ACTION_REMOVE_CONTENT_USER_RELATION_BEFORE, $user_ids[$i], $post_id, $typeState_ids[$i]);
 				Database\removeRelationWithTypeState( $user_ids[ $i ], $post_id, $typeState_ids[ $i ] );
+				do_action(Plugin::ACTION_REMOVE_CONTENT_USER_RELATION_AFTER, $user_ids[$i], $post_id, $typeState_ids[$i]);
 			}
 		}
 

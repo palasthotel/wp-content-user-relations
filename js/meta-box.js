@@ -23,6 +23,7 @@
 	// ----------------------------
 	// local vars
 	// ----------------------------
+	const post_id = data.post_id;
 	const i18n = data.i18n;
 	const relations = data.relations;
 	const typestates = data.typestates;
@@ -339,7 +340,7 @@
 			$relation_row.toggleClass('will-be-removed');
 			const $action = builder.findActionInput($relation_row);
 			if ($relation_row.hasClass('will-be-removed')) {
-				$action.val(ACTION.delete);
+				$action.val(ACTION.remove);
 				$btn.text(i18n.unremove);
 			}
 			else {
@@ -363,6 +364,7 @@
 
 	if (functionNotExists('on_add_user_relation', events)) {
 		events.on_add_user_relation = function(e, user, relation) {
+			console.log(user, relation);
 			let $user_row = builder.findUserRow(user.ID);
 			relation.typestate_id = relation.id;
 			relation.user_id = user.ID;
@@ -433,7 +435,7 @@
 					api.findRelatableUsers(request.term, function(data) {
 						cache[term] = data.users;
 						response(data.users);
-					});
+					},{post_id:post_id});
 				},
 				select: function(event, ui) {
 					builder.events.addUserRelation(
@@ -519,5 +521,8 @@
 	// lets get it started
 	builder.init();
 
-})(jQuery, ContentUserRelations_API, ContentUserRelations_MetaBox,
+})(
+	jQuery,
+	ContentUserRelations_API,
+	ContentUserRelations_MetaBox,
 	window.ContentUserRelations_MetaBox_Builder || {});
