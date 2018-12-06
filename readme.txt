@@ -29,7 +29,8 @@ Relate user states to your contents.
 == Changelog ==
 
 = 1.1.0 =
-* edit user relations on post edit
+* Feature: edit user relations on post edit
+* Feature: added a lot of actions and filters
 
 = 1.0.0 =
 * First release

@@ -213,6 +213,6 @@ class PostMetaBox {
 				do_action(Plugin::ACTION_REMOVE_CONTENT_USER_RELATION_AFTER, $user_ids[$i], $post_id, $typeState_ids[$i]);
 			}
 		}
-
+		do_action(Plugin::ACTION_CONTENT_USER_RELATIONS_SAVED, $post_id, $actions, $user_ids, $typeState_ids);
 	}
 }

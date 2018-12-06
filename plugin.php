@@ -46,6 +46,7 @@ class Plugin {
 	const ACTION_ADD_CONTENT_USER_RELATION_AFTER = "content_user_relations_add_relation_after";
 	const ACTION_REMOVE_CONTENT_USER_RELATION_BEFORE = "content_user_relations_remove_relation_before";
 	const ACTION_REMOVE_CONTENT_USER_RELATION_AFTER = "content_user_relations_remove_relation_after";
+	const ACTION_CONTENT_USER_RELATIONS_SAVED = "content_user_relations_saved_relations";
 
 	/**
 	 * @var Plugin|null
