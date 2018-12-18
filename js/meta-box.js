@@ -321,6 +321,7 @@
 					$relation_row.remove();
 					builder.update_parent_modification_state($parent);
 				}
+				$(window.document.body).trigger(HOOKS.USER_RELATION_REMOVE);
 				return;
 			}
 
@@ -336,6 +337,7 @@
 			}
 
 			builder.update_parent_modification_state($relation_row);
+			$(window.document.body).trigger(HOOKS.USER_RELATION_REMOVE);
 
 		};
 	}
