@@ -1,9 +1,13 @@
 (function($, api, data, builder) {
 
+	/**
+	 * events on body
+	 */
 	const HOOKS = {
-		RELATION_TYPESTATE_SELECTION_CHANGE: "relation_typestate_selection_change",
-		USER_RELATION_ADD: "user_relation_add",
-		USER_RELATION_REMOVE: "user_relation_remove",
+		READY: "user_relations_ready",
+		RELATION_TYPESTATE_SELECTION_CHANGE: 'relation_typestate_selection_change',
+		USER_RELATION_ADD: 'user_relation_add',
+		USER_RELATION_REMOVE: 'user_relation_remove',
 	};
 
 	// --------------------------------------------------------
@@ -41,24 +45,6 @@
 	}
 
 	// ----------------------------
-	// hook system
-	// ----------------------------
-	if (typeof builder._hooks === typeof undefined) {
-		builder._hooks = {};
-	}
-
-	builder.fireHook = function(name, value) {
-		if (typeof builder._hooks[name] === typeof []) {
-			for (let i = 0; i < builder._hooks[name].length; i++) {
-				if (typeof builder._hooks[name][i] === 'function') {
-					value = builder._hooks[name][i](value);
-				}
-			}
-		}
-		return value;
-	};
-
-	// ----------------------------
 	// relations table builder
 	// ----------------------------
 
@@ -70,10 +56,10 @@
 	 */
 	if (functionNotExists('buildHiddenField')) {
 		builder.buildHiddenField = function(name, value) {
-			return $('<input />').
-				val(value).
-				attr('name', name).
-				attr('type', 'hidden');
+			return $('<input />')
+				.val(value)
+				.attr('name', name)
+				.attr('type', 'hidden');
 		};
 	}
 
@@ -111,16 +97,16 @@
 	 */
 	if (functionNotExists('buildRelationItem')) {
 		builder.buildRelationItem = function(relation) {
-			return $('<li></li>').
-				addClass('cur-relations__item').
-				attr('data-typestate-id', relation.typestate_id).
-				append(
-					$('<span></span>').
-						text(relation.type_name + ' – ' + relation.state_name).
-						addClass('name'),
-				).
-				append(this.buildRemove()).
-				append(this.buildHiddenFields(relation));
+			return $('<li></li>')
+				.addClass('cur-relations__item')
+				.attr('data-typestate-id', relation.typestate_id)
+				.append(
+					$('<span></span>')
+						.text(relation.type_name + ' – ' + relation.state_name)
+						.addClass('name'),
+				)
+				.append(this.buildRemove())
+				.append(this.buildHiddenFields(relation));
 		};
 	}
 
@@ -159,8 +145,8 @@
 	<td class="relations column-relations"></td>
 </tr>`).attr('id', 'cur-user-row-' + user.user_id).addClass('cur-user_row');
 
-			$row.find('.relations').
-				append(this.buildRelationsList(user.relations));
+			$row.find('.relations')
+				.append(this.buildRelationsList(user.relations));
 
 			return $row;
 		};
@@ -207,11 +193,11 @@
 			const $select = $wrapper.find('select');
 			for (let i = 0; i < typestates.length; i++) {
 				const typestate = typestates[i];
-				$('<option></option>').
-					text(`${typestate.type_name} – ${typestate.state_name}`).
-					attr('value', typestate.id).
-					data('typestate', typestate).
-					appendTo($select);
+				$('<option></option>')
+					.text(`${typestate.type_name} – ${typestate.state_name}`)
+					.attr('value', typestate.id)
+					.data('typestate', typestate)
+					.appendTo($select);
 			}
 			return $wrapper;
 		};
@@ -236,11 +222,12 @@
 	 */
 	if (functionNotExists('buildControls')) {
 		builder.buildControls = function(typestates) {
-			return $('<div></div>').
-				addClass('cur-controls').
-				append(this.buildRelationTypeSelect(typestates).
-					addClass('cur-control')).
-				append(this.buildAutocompleteControl().addClass('cur-control'));
+			return $('<div></div>')
+				.addClass('cur-controls')
+				.append(this.buildRelationTypeSelect(typestates)
+					.addClass('cur-control'))
+				.append(
+					this.buildAutocompleteControl().addClass('cur-control'));
 		};
 	}
 
@@ -248,19 +235,19 @@
 		builder.buildAutocompleteUserItem = function(user) {
 			const $li = $('<li></li>').addClass('cur-autocomplete-user-item');
 			$li.append(
-				$('<div></div>').
-					text(user.display_name).
-					addClass('user-item__user-name'),
+				$('<div></div>')
+					.text(user.display_name)
+					.addClass('user-item__user-name'),
 			);
 			$li.append(
-				$('<div></div>').
-					text('EMail: ' + user.user_email).
-					addClass('user-item__user-email'),
+				$('<div></div>')
+					.text('EMail: ' + user.user_email)
+					.addClass('user-item__user-email'),
 			);
 			$li.append(
-				$('<div></div>').
-					text('ID: ' + user.ID).
-					addClass('user-item__ID'),
+				$('<div></div>')
+					.text('ID: ' + user.ID)
+					.addClass('user-item__ID'),
 			);
 			$li.data('item.data', user);
 			return $li;
@@ -302,9 +289,9 @@
 
 	if (functionNotExists('')) {
 		builder.getSelectedTypeState = function($controls) {
-			return $controls.find('select').
-				children(':selected').
-				data('typestate');
+			return $controls.find('select')
+				.children(':selected')
+				.data('typestate');
 		};
 	}
 
@@ -364,7 +351,6 @@
 
 	if (functionNotExists('on_add_user_relation', events)) {
 		events.on_add_user_relation = function(e, user, relation) {
-			console.log(user, relation);
 			let $user_row = builder.findUserRow(user.ID);
 			relation.typestate_id = relation.id;
 			relation.user_id = user.ID;
@@ -374,10 +360,10 @@
 				user.relations = [relation];
 				$user_row = builder.buildRow(user);
 				builder.findActionInput($user_row).val(ACTION.add);
-				builder.findRelations($user_row).
-					children().
-					last().
-					addClass('will-be-added');
+				builder.findRelations($user_row)
+					.children()
+					.last()
+					.addClass('will-be-added');
 				$user_row.addClass('will-be-added');
 				builder.elements.$tbody.append($user_row);
 				builder.elements.$emptyRow.remove();
@@ -396,8 +382,8 @@
 				return;
 			}
 			const $relations_list = builder.findRelations($user_row);
-			const $relation = builder.buildRelationItem(relation).
-				addClass('will-be-added');
+			const $relation = builder.buildRelationItem(relation)
+				.addClass('will-be-added');
 			builder.findActionInput($relation).val(ACTION.add);
 			$relations_list.append($relation);
 
@@ -435,13 +421,14 @@
 					api.findRelatableUsers(request.term, function(data) {
 						cache[term] = data.users;
 						response(data.users);
-					},{post_id:post_id});
+					}, {post_id: post_id});
 				},
 				select: function(event, ui) {
 					builder.events.addUserRelation(
 						ui.item,
 						builder.getSelectedTypeState($controls),
 					);
+					$(window.document.body).trigger(HOOKS.USER_RELATION_ADD);
 					return false;
 				},
 				delay: 500,
@@ -449,8 +436,8 @@
 			});
 
 			$autocomplete.on('click', function() {
-				$autocomplete.autocomplete('instance').
-					search($autocomplete.val());
+				$autocomplete.autocomplete('instance')
+					.search($autocomplete.val());
 			});
 
 			$autocomplete.autocomplete('instance')._renderItem = function(
@@ -495,9 +482,9 @@
 
 			builder.checkEmptyTable();
 			this.elements.$controls = builder.buildControls(typestates);
-			this.elements.$app.append($('<h3></h3>').
-				text(i18n.label_add_user_control).
-				addClass('cur-controls__label'));
+			this.elements.$app.append($('<h3></h3>')
+				.text(i18n.label_add_user_control)
+				.addClass('cur-controls__label'));
 			this.elements.$app.append(this.elements.$controls);
 
 			this.events.initAutocomplete(this.elements.$controls);
@@ -520,6 +507,7 @@
 
 	// lets get it started
 	builder.init();
+	$(window.document.body).trigger(HOOKS.READY);
 
 })(
 	jQuery,
