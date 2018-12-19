@@ -2,6 +2,31 @@
 
 (function($, api){
 
+	const HOOKS = api.HOOKS = {
+		ON_FIND_CONTENTS_ARGS: "find_contents_args",
+		ON_FIND_USERS_ARGS: "find_users_args",
+	};
+
+	const _hooks = {};
+
+	const safeHook = (name)=>{
+		if(typeof _hooks[name] !== typeof []){
+			_hooks[name] = [];
+		}
+		return _hooks[name];
+	};
+
+	api.onHook = function(name, hook) {
+		safeHook(name).push(hook);
+	};
+
+	api.fireHook = function(name, data) {
+		for( let fn of safeHook(name)){
+			data = fn(data);
+		}
+		return data;
+	};
+
 	/**
 	 *
 	 * @param {string} search
@@ -26,10 +51,10 @@
 	 * @param data null|object
 	 */
 	api.findRelatableContents = function(search, cb, data){
-
 		$.ajax({
+			method: "POST",
 			url: api.ajaxurls.findContents,
-			data: buildData(search, data),
+			data: api.fireHook(HOOKS.ON_FIND_CONTENTS_ARGS,buildData(search, data)),
 			success: function(result){
 				cb(result);
 			}
@@ -44,8 +69,9 @@
 	 */
 	api.findRelatableUsers = function(search, cb, data) {
 		$.ajax({
+			method: "POST",
 			url: api.ajaxurls.findUsers,
-			data: buildData(search, data),
+			data: api.fireHook(HOOKS.ON_FIND_USERS_ARGS,buildData(search, data)),
 			success: function(result){
 				cb(result);
 			}
