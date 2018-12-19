@@ -60,7 +60,7 @@ class Ajax {
 
 		$this->securityCheck();
 
-		$search = sanitize_text_field( $_GET["s"] );
+		$search = sanitize_text_field( $_POST["s"] );
 		$query  = new \WP_Query( array(
 			's'              => $search,
 			'user_relatable' => true,
@@ -92,20 +92,18 @@ class Ajax {
 
 		$this->securityCheck();
 
-		$search = sanitize_text_field( $_GET["s"] );
-		$post_id = intval($_GET["post_id"]);
-
-		$users  = new \WP_User_Query(
-			apply_filters(
-				Plugin::FILTER_AJAX_WP_USERS_QUERY_ARGS,
-				array(
-					"search" => "*$search*",
-					"number" => 10
-				),
-				$search,
-				$post_id
-			)
+		$search  = sanitize_text_field( $_POST["s"] );
+		$post_id = intval( $_POST["post_id"] );
+		$args    = apply_filters(
+			Plugin::FILTER_AJAX_WP_USERS_QUERY_ARGS,
+			array(
+				"search" => "*$search*",
+				"number" => 10,
+			),
+			$search,
+			$post_id
 		);
+		$users   = new \WP_User_Query( $args );
 
 		$users_response = array();
 		foreach ( $users->get_results() as $user ) {
