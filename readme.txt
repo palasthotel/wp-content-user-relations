@@ -29,6 +29,7 @@ Relate user states to your contents.
 == Changelog ==
 
 = 1.1.0 =
+* Feature: Invalidate
 * Feature: edit user relations on post edit
 * Feature: added a lot of actions and filters
 

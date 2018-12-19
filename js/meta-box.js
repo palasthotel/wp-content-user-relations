@@ -3,7 +3,7 @@
 	/**
 	 * events on body
 	 */
-	const HOOKS = {
+	const EVENTS = {
 		READY: 'user_relations_ready',
 		RELATION_TYPESTATE_SELECTION_CHANGE: 'relation_typestate_selection_change',
 		USER_RELATION_ADD: 'user_relation_add',
@@ -147,7 +147,6 @@
 				.attr('id', 'cur-user-row-' + user.user_id)
 				.data('user', user)
 				.addClass('cur-user_row');
-
 
 			$row.find('.relations')
 				.append(this.buildRelationsList(user.relations));
@@ -313,7 +312,7 @@
 			e.preventDefault();
 			const $btn = $(this);
 			const $relation_row = $btn.closest('li');
-			const user = $relation_row.closest("tr").data("user");
+			const user = $relation_row.closest('tr').data('user');
 
 			if ($relation_row.hasClass('will-be-added')) {
 				autocomplete_cache_invalidate_for(user);
@@ -328,7 +327,7 @@
 					builder.update_parent_modification_state($parent);
 				}
 				$(window.document.body)
-					.trigger(HOOKS.USER_RELATION_REMOVE, user);
+					.trigger(EVENTS.USER_RELATION_REMOVE, user);
 				return;
 			}
 
@@ -345,7 +344,7 @@
 
 			builder.update_parent_modification_state($relation_row);
 			$(window.document.body)
-				.trigger(HOOKS.USER_RELATION_REMOVE, user);
+				.trigger(EVENTS.USER_RELATION_REMOVE, user);
 
 		};
 	}
@@ -417,40 +416,44 @@
 		};
 	}
 
-	const autocomplete_cache = {};
+	const autocomplete_cache = api.cache('autocomplete');
 
 	function autocomplete_cache_get(term) {
-		return (typeof autocomplete_cache[term] !== typeof undefined) ?
-			autocomplete_cache[term] :
-			null;
+		return autocomplete_cache.get(term);
 	}
 
 	function autocomplete_cache_add_term(term, user_list) {
-		autocomplete_cache[term] = user_list;
+		autocomplete_cache.set(term, user_list);
 	}
 
 	function autocomplete_cache_remove_user(user) {
-		for (let term in autocomplete_cache) {
-			if (!autocomplete_cache.hasOwnProperty(term)) {
-				continue;
-			}
-			autocomplete_cache[term] = autocomplete_cache[term].filter(
+		const terms = autocomplete_cache.keys();
+		for (let key in terms) {
+			if(!terms.hasOwnProperty(key)) continue;
+			const term = terms[key];
+			const users = autocomplete_cache.get(term);
+			const new_users = users.filter(
 				(u) => u.ID !== user.ID,
 			);
+			autocomplete_cache.set(term, new_users);
 		}
 	}
 
 	function autocomplete_cache_invalidate_for(user) {
-		for (let term in autocomplete_cache) {
-			if (!autocomplete_cache.hasOwnProperty(term)) {
-				continue;
-			}
-			if(user.display_name.indexOf(term) !== false || user.user_email.indexOf(term) !== false){
-				autocomplete_cache[term] = undefined;
-				delete autocomplete_cache[term];
-			}
-		}
+		autocomplete_cache.invalidate(
+			(term) =>
+				user.display_name.indexOf(term) !== false
+				||
+				user.user_email.indexOf(term) !== false,
+		);
 	}
+
+	builder.autocomplete_cache = {
+		get: autocomplete_cache_get,
+		add: autocomplete_cache_add_term,
+		remove_user: autocomplete_cache_remove_user,
+		invalidate_for: autocomplete_cache_invalidate_for,
+	};
 
 	if (functionNotExists('initAutocomplete', events)) {
 		events.initAutocomplete = function($controls) {
@@ -473,8 +476,8 @@
 						ui.item,
 						builder.getSelectedTypeState($controls),
 					);
-					autocomplete_cache_remove_user(ui.item);
-					$(window.document.body).trigger(HOOKS.USER_RELATION_ADD);
+					$(window.document.body)
+						.trigger(EVENTS.USER_RELATION_ADD, ui.item);
 					return false;
 				},
 				delay: 500,
@@ -553,7 +556,7 @@
 
 	// lets get it started
 	builder.init();
-	$(window.document.body).trigger(HOOKS.READY);
+	$(window.document.body).trigger(EVENTS.READY);
 
 })(
 	jQuery,
