@@ -478,6 +478,7 @@
 					);
 					$(window.document.body)
 						.trigger(EVENTS.USER_RELATION_ADD, ui.item);
+					$(this).val('');
 					return false;
 				},
 				delay: 500,
