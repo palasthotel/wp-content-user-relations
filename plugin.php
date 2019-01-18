@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Content User Relations
- * Plugin URI: https://palasthotel.de
+ * Plugin URI: https://github.com/palasthotel/wp-content-user-relations
  * Description: Relate user states to your contents
  * Version: 1.1.0
  * Author: Palasthotel <edward.bock@palasthotel.de>
