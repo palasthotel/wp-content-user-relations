@@ -4,10 +4,12 @@
 	 * events on body
 	 */
 	const EVENTS = {
-		READY: 'user_relations_ready',
-		RELATION_TYPESTATE_SELECTION_CHANGE: 'relation_typestate_selection_change',
-		USER_RELATION_ADD: 'user_relation_add',
-		USER_RELATION_REMOVE: 'user_relation_remove',
+		READY: 'content_user_relations_ready',
+		RELATION_TYPESTATE_SELECTION_CHANGE: 'content_user_relation_typestate_selection_change',
+		USER_RELATION_ADD: 'content_user_relation_add',
+		USER_RELATION_REMOVE: 'content_user_relation_remove',
+		// gutenberg saved post
+		SAVED: 'content_user_relation_post_saved',
 	};
 
 	// --------------------------------------------------------
@@ -307,6 +309,14 @@
 	}
 	const events = builder.events;
 
+	if(functionNotExists('onSaved', events)){
+		events.onSaved = function(){
+			builder.findActionInput(builder.elements.$tbody).val("");
+			builder.elements.$tbody.find(".will-be-added").removeClass("will-be-added");
+			builder.elements.$tbody.find(".will-be-removed").remove();
+		}
+	}
+
 	if (functionNotExists('on_remove', events)) {
 		events.on_remove = function(e) {
 			e.preventDefault();
@@ -352,7 +362,7 @@
 	if (functionNotExists('addUserRelation', events)) {
 		events.addUserRelation = function(user, typeStateItem) {
 			builder.elements.$app.trigger(
-				'content_user_relations_add_relation',
+				EVENTS.USER_RELATION_ADD,
 				[user, typeStateItem],
 			);
 		};
@@ -476,8 +486,7 @@
 						ui.item,
 						builder.getSelectedTypeState($controls),
 					);
-					$(window.document.body)
-						.trigger(EVENTS.USER_RELATION_ADD, ui.item);
+					$(window.document.body).trigger(EVENTS.USER_RELATION_ADD, ui.item);
 					$(this).val('');
 					return false;
 				},
@@ -516,10 +525,9 @@
 			this.elements = {};
 			this.elements.$app = $(`#${this.app_root_id}`);
 
-			this.elements.$app.on('click', 'a.remove',
-				builder.events.on_remove);
-			this.elements.$app.on('content_user_relations_add_relation',
-				builder.events.on_add_user_relation);
+			this.elements.$app.on('click', 'a.remove', builder.events.on_remove);
+			this.elements.$app.on(EVENTS.USER_RELATION_ADD,	builder.events.on_add_user_relation);
+			this.elements.$app.on(EVENTS.SAVED, builder.events.onSaved);
 
 			this.elements.$table = builder.buildTable();
 			this.elements.$app.append(this.elements.$table);
@@ -558,6 +566,48 @@
 	// lets get it started
 	builder.init();
 	$(window.document.body).trigger(EVENTS.READY);
+
+	// ----------------------------
+	// gutenberg extension
+	// ----------------------------
+
+	// return if not using gutenberg
+	if(
+		typeof wp === typeof undefined
+		||
+		typeof wp.data === typeof undefined
+		||
+		typeof wp.data.subscribe === typeof undefined
+	) return;
+
+	// redux of gutenberg connection
+	const { subscribe } = wp.data;
+
+	// select store path
+	const editor  = wp.data.select('core/editor');
+
+	// get value from store
+	const modified = editor.getEditedPostAttribute( 'modified' );
+
+	// get saving state functions of editor store
+	const didPostSaveSucceed = editor.didPostSaveRequestSucceed;
+	const isSavingPost = editor.isSavingPost;
+
+	// Watch for events
+	let isSaving = false;
+	const unsubscribe = subscribe( () => {
+		if(isSavingPost()) isSaving = true;
+		if(isSaving && !isSavingPost()){
+			isSaving = false;
+			if(didPostSaveSucceed()){
+				setTimeout(()=>{
+					$(builder.elements.$app).trigger(EVENTS.SAVED);
+				},660);
+			} else {
+				console.error("Post was not saved successfully");
+			}
+		}
+	} );
 
 })(
 	jQuery,
