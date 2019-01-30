@@ -3,7 +3,7 @@ Contributors: palasthotel, edwardbock
 Donate link: http://palasthotel.de/
 Tags: user, relation, metabox
 Requires at least: 4.0
-Tested up to: 4.9.9
+Tested up to: 5.0.3
 Stable tag: 1.1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
@@ -32,6 +32,7 @@ Relate user states to your contents.
 * Feature: added some new filters for ajax requests
 
 = 1.1.0 =
+* Optimization: Ready for Gutenberg
 * Feature: edit user relations on post edit
 * Feature: added a lot of actions and filters
 
