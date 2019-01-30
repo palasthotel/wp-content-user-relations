@@ -34,7 +34,10 @@ class Plugin {
 	const FILTER_QUERY_RESULT = "content_user_relations_query_result";
 	const FILTER_QUERY_MAP_RESULT = "content_user_relations_query_map_result";
 	const FILTER_POST_META_BOX_USER_RELATIONS = "content_user_relations_post_meta_box_user_relations";
-	const FILTER_AJAX_WP_USERS_QUERY_ARGS = "content_user_relations_ajax_wp_users_query_args";
+	const FILTER_AJAX_WP_POSTS_QUERY_ARGS = "content_user_relations_ajax_wp_posts_query_args";
+	const FILTER_AJAX_WP_POST = "content_user_relations_ajax_wp_post";
+	const FILTER_AJAX_WP_POSTS_RESPONSE = "content_user_relations_ajax_wp_posts";
+	const FILTER_AJAX_WP_USERS_QUERY_ARGS = "content_user_relations_ajax_wp_posts_query_args";
 	const FILTER_AJAX_USER = "content_user_relations_ajax_user";
 	const FILTER_AJAX_USERS_RESPONSE = "content_user_relations_ajax_users";
 	const FILTER_META_BOX_EXTENSION_SCRIPS = "content_user_relations_meta_box_extension_scripts";

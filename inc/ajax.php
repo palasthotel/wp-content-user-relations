@@ -61,25 +61,35 @@ class Ajax {
 		$this->securityCheck();
 
 		$search = sanitize_text_field( $_POST["s"] );
-		$query  = new \WP_Query( array(
-			's'              => $search,
-			'user_relatable' => true,
-		) );
+		$query  = new \WP_Query(
+			apply_filters(
+				Plugin::FILTER_AJAX_WP_POSTS_QUERY_ARGS,
+				array(
+					's'              => $search,
+					'user_relatable' => true,
+				)
+			)
+		);
 
 		$response = array();
 		while ( $query->have_posts() ) {
 			$query->the_post();
 
-			$response[] = array(
-				"ID"         => get_the_ID(),
-				"post_title" => get_the_title(),
-				"post_type"  => get_post_type(),
+			$response[] = apply_filters(
+				Plugin::FILTER_AJAX_WP_POST,
+				array(
+					"ID"         => get_the_ID(),
+					"post_title" => get_the_title(),
+					"post_type"  => get_post_type(),
+				), get_post()
 			);
 
 
 		}
 
-		wp_send_json( $response );
+		wp_send_json(
+			apply_filters( Plugin::FILTER_AJAX_WP_POSTS_RESPONSE, $response )
+		);
 
 		// all contents that are available for relations
 
