@@ -8,9 +8,6 @@
 
 namespace ContentUserRelations;
 
-
-use function ContentUserRelations\Database\getPostRelations;
-
 class Ajax {
 
 	const ACTION_FIND_CONTENTS = "cur_find_contents";
@@ -115,11 +112,24 @@ class Ajax {
 					'user_nicename',
 					'user_email',
 				),
+				'meta_query' => array(
+					'relation' => 'OR',
+					array(
+						'key'     => 'first_name',
+						'value'   => $search,
+						'compare' => 'LIKE'
+					),
+					array(
+						'key'     => 'last_name',
+						'value'   => $search,
+						'compare' => 'LIKE'
+					)
+				)
 			),
 			$search,
 			$post_id
 		);
-		$users   = new \WP_User_Query( $args );
+		$users   = new CUR_WP_User_Query( $args );
 
 		$users_response = array();
 		foreach ( $users->get_results() as $user ) {
