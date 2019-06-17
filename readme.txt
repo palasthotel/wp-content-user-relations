@@ -3,8 +3,8 @@ Contributors: palasthotel, edwardbock
 Donate link: http://palasthotel.de/
 Tags: user, relation, metabox
 Requires at least: 4.0
-Tested up to: 5.0.3
-Stable tag: 1.1.0
+Tested up to: 5.2.1
+Stable tag: 1.1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -27,6 +27,9 @@ Relate user states to your contents.
 
 
 == Changelog ==
+
+= 1.1.2 =
+* Optimization: user search query over all columns
 
 = 1.1.1 =
 * Feature: added some new filters for ajax requests
