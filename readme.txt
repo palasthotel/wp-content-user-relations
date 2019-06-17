@@ -4,7 +4,7 @@ Donate link: http://palasthotel.de/
 Tags: user, relation, metabox
 Requires at least: 4.0
 Tested up to: 5.2.1
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl
 
@@ -27,6 +27,11 @@ Relate user states to your contents.
 
 
 == Changelog ==
+
+
+= 1.1.3 =
+* Bugfix: wrong filter name
+* Bugfix: user search query over all columns relation fix
 
 = 1.1.2 =
 * Optimization: user search query over all columns

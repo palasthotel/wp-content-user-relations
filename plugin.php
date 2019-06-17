@@ -3,7 +3,7 @@
  * Plugin Name: Content User Relations
  * Plugin URI: https://github.com/palasthotel/wp-content-user-relations
  * Description: Relate user states to your contents
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Palasthotel <edward.bock@palasthotel.de>
  * Author URI: https://palasthotel.de
  * Text Domain: content-user-relations
@@ -37,7 +37,7 @@ class Plugin {
 	const FILTER_AJAX_WP_POSTS_QUERY_ARGS = "content_user_relations_ajax_wp_posts_query_args";
 	const FILTER_AJAX_WP_POST = "content_user_relations_ajax_wp_post";
 	const FILTER_AJAX_WP_POSTS_RESPONSE = "content_user_relations_ajax_wp_posts";
-	const FILTER_AJAX_WP_USERS_QUERY_ARGS = "content_user_relations_ajax_wp_posts_query_args";
+	const FILTER_AJAX_WP_USERS_QUERY_ARGS = "content_user_relations_ajax_wp_users_query_args";
 	const FILTER_AJAX_USER = "content_user_relations_ajax_user";
 	const FILTER_AJAX_USERS_RESPONSE = "content_user_relations_ajax_users";
 	const FILTER_META_BOX_EXTENSION_SCRIPS = "content_user_relations_meta_box_extension_scripts";
@@ -86,6 +86,7 @@ class Plugin {
 		require_once dirname(__FILE__)."/inc/database/db.php";
 		require_once dirname(__FILE__)."/inc/database/query-conditions.php";
 		require_once dirname(__FILE__)."/inc/database/query.php";
+		require_once dirname(__FILE__)."/inc/CUR_WP_User_Query.php";
 
 		//WP_User_Query extension
 		require_once dirname(__FILE__)."/inc/wp-user-query-extension.php";
