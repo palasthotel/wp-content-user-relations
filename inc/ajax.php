@@ -109,6 +109,12 @@ class Ajax {
 			array(
 				"search" => "*$search*",
 				"number" => 10,
+				'search_columns' => array(
+					'ID',
+					'user_login',
+					'user_nicename',
+					'user_email',
+				),
 			),
 			$search,
 			$post_id
