@@ -53,7 +53,7 @@ class WPPostQueryExtension {
 			} else {
 				if(array_search($set_type, $enabled_post_types)) return;
 				// it set post type is not in whitelist, than we should not return any posts
-				$query->query_vars["post_type"] = "content-user-relations-restricted-post-type-".rand(100,999);
+				$query->query_vars["post_type"] = "content-user-relations-restricted-post-type-just-some-stupid-unique-string-to-prevent-results";
 			}
 		}
 	}
