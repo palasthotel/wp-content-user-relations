@@ -169,6 +169,11 @@ class PostMetaBox {
 			return;
 		}
 
+		// If this is just a revision, dont.
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
 		if ( ! isset( $_POST[ self::POST_READY_TO_SAVE ] ) || $_POST[ self::POST_READY_TO_SAVE ] != self::READY_TO_SAVE_VALUE ) {
 			// perhaps something is wrong with javascript rendering.
 			// to prevent loss of data ignore changes
