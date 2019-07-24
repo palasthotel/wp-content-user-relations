@@ -30,6 +30,7 @@ Relate user states to your contents.
 
 = 1.1.4 =
 * Feature: new filter to hide forms on user profile page content_user_relations_edit_on_user_profile
+* Bugfix: do not save relations on post revisions
 
 = 1.1.3 =
 * Bugfix: wrong filter name
