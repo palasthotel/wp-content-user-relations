@@ -22,6 +22,9 @@ class UserProfile {
 	}
 
 	function init(){
+		// disable relations editor on user profile
+		if(!apply_filters(Plugin::FILTER_EDIT_ON_USER_PROFILE, true)) return;
+
 		if($this->plugin->settings->currentUserCanModify() && is_admin()){
 			// only for authorized users
 			add_action( 'admin_enqueue_scripts', array(

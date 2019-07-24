@@ -3,13 +3,13 @@
  * Plugin Name: Content User Relations
  * Plugin URI: https://github.com/palasthotel/wp-content-user-relations
  * Description: Relate user states to your contents
- * Version: 1.1.3
+ * Version: 1.1.4
  * Author: Palasthotel <edward.bock@palasthotel.de>
  * Author URI: https://palasthotel.de
  * Text Domain: content-user-relations
  * Domain Path: /languages
  * Requires at least: 4.0
- * Tested up to: 5.2.1
+ * Tested up to: 5.2.2
  * License: http://www.gnu.org/licenses/gpl-2.0.html GPLv2
  * @copyright Copyright (c) 2018, Palasthotel
  * @package Palasthotel\ContentUserRelations
@@ -41,6 +41,7 @@ class Plugin {
 	const FILTER_AJAX_USER = "content_user_relations_ajax_user";
 	const FILTER_AJAX_USERS_RESPONSE = "content_user_relations_ajax_users";
 	const FILTER_META_BOX_EXTENSION_SCRIPS = "content_user_relations_meta_box_extension_scripts";
+	const FILTER_EDIT_ON_USER_PROFILE = "content_user_relations_edit_on_user_profile";
 
 	/**
 	 * actions
