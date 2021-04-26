@@ -49,7 +49,7 @@ class PostMetaBox {
 	 * register meta box
 	 */
 	function add_meta_box( $post_type, $post ) {
-		if ( $this->plugin->settings->isPostTypeEnabled( $post_type ) ) {
+		if ( $this->plugin->settings->isPostTypeEnabled( $post_type ) && !get_current_screen()->is_block_editor() ) {
 			wp_enqueue_style(
 				Plugin::HANDLE_POST_META_BOX_STYLE,
 				$this->plugin->url . "/css/meta-box.css"
@@ -117,7 +117,10 @@ class PostMetaBox {
 				'content-user-relations',
 				__( 'Content user relations', Plugin::DOMAIN ),
 				array( $this, 'render' ),
-				$post_type
+				$post_type,
+				array(
+					'__block_editor_compatible_meta_box' => false,
+				)
 			);
 		}
 	}

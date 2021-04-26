@@ -63,7 +63,7 @@ class QueryConditions {
 				case "state_name":
 				case "type_name":
 					$sub_wheres[] = $key." = '".esc_sql($val)."'";
-					continue;
+					continue 2;
 				case "id": // relation id
 				case "post_id":
 				case "user_id":
@@ -71,10 +71,10 @@ class QueryConditions {
 				case "state_id":
 				case "typestate_id":
 					$sub_wheres[] = $key." = ".intval($val);
-					continue;
+					continue 2;
 				case "relation":
 					if(strtoupper($val) == "OR") $relation = "OR";
-					continue;
+					continue 2;
 			}
 		}
 

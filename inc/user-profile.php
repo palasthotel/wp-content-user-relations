@@ -53,7 +53,7 @@ class UserProfile {
 	 * @param $hook
 	 */
 	function user_profile_js( $hook ) {
-		if ( "user-edit.php" == $hook || "profile.php" ) {
+		if ( "user-edit.php" == $hook || "profile.php" == $hook ) {
 			wp_enqueue_style(
 				"content-user-relations-user-profile-style",
 				$this->plugin->url . "/css/user-profile.css"
